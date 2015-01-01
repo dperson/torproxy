@@ -20,13 +20,13 @@ and removing ads and other obnoxious Internet junk.
 
 # How to use this image
 
-*NOTE*: this image is setup by default to be a relay only (not an exit node)
+**NOTE**: this image is setup by default to be a relay only (not an exit node)
 
 ## Exposing the port
 
     sudo docker run --rm -p 1080:1080 -p 8118:8118 -d dperson/torproxy
 
-*NOTE*: it will take a while for tor to bootstrap...
+**NOTE**: it will take a while for tor to bootstrap...
 
 Then you can hit tor directly at `http://hostname:1080` or privoxy web proxy at
 `http://host-ip:8080` with your browser.
