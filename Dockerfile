@@ -23,8 +23,7 @@ RUN sed -i 's|localhost:8118|0.0.0.0:8118|' /etc/privoxy/config && \
     echo 'DataDirectory /var/lib/tor' >> /etc/tor/torrc && \
     echo 'ExitPolicy reject *:*' >> /etc/tor/torrc && \
     echo 'RelayBandwidthRate 10 KB' >> /etc/tor/torrc && \
-    echo 'RelayBandwidthBurst 20 KB' >> /etc/tor/torrc && \
-    echo 'BridgeRelay 1' >> /etc/tor/torrc
+    echo 'RelayBandwidthBurst 20 KB' >> /etc/tor/torrc
 
 EXPOSE 1080 8118
 
