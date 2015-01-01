@@ -38,6 +38,9 @@ Then you can hit tor directly at `http://hostname:1080` or privoxy web proxy at
     Usage: torproxy.sh [-opt] [command]
     Options (fields in '[]' are optional, '<>' are required):
         -h          This help
+        -b ""       Configure tor relaying bandwidth in KB/s
+                    possible arg: "[a number]" - # of KB/s to allow
+        -e          Allow this to be an exit node for tor traffic
         -t ""       Configure timezone
                     possible arg: "[timezone]" - zoneinfo timezone for container
 

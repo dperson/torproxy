@@ -18,6 +18,26 @@
 
 set -o nounset                              # Treat unset variables as an error
 
+### bandwidth: set the BW available for relaying
+# Arguments:
+#   KiB/s) KiB/s of data that can be relayed
+# Return: Updated configuration file
+bandwidth() {
+    local kbs="${1:-10}"
+
+    sed -i '/^RelayBandwidth/d' /etc/tor/torrc
+    echo "RelayBandwidthRate $kbs KB" >> /etc/tor/torrc
+    echo "RelayBandwidthBurst $(( kbs * 2 )) KB" >> /etc/tor/torrc
+}
+
+### exitnode: Allow exit traffic
+# Arguments:
+#   N/A)
+# Return: Updated configuration file
+exitnode() {
+    sed -i '/^ExitPolicy/d' /etc/tor/torrc
+}
+
 ### timezone: Set the timezone for the container
 # Arguments:
 #   timezone) for example EST5EDT
@@ -43,6 +63,9 @@ usage() {
     echo "Usage: ${0##*/} [-opt] [command]
 Options (fields in '[]' are optional, '<>' are required):
     -h          This help
+    -b \"\"       Configure tor relaying bandwidth in KB/s
+                possible arg: \"[a number]\" - # of KB/s to allow
+    -e          Allow this to be an exit node for tor traffic
     -t \"\"       Configure timezone
                 possible arg: \"[timezone]\" - zoneinfo timezone for container
 
@@ -51,9 +74,11 @@ The 'command' (if provided and valid) will be run instead of torproxy
     exit $RC
 }
 
-while getopts ":ht:" opt; do
+while getopts ":b:eht:" opt; do
     case "$opt" in
         h) usage ;;
+        b) bandwidth "$OPTARG" ;;
+        e) exitnode ;;
         t) timezone "$OPTARG" ;;
         "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
         ":") echo "No argument value for option: -$OPTARG"; usage 2 ;;

@@ -18,8 +18,7 @@ RUN sed -i 's|localhost:8118|0.0.0.0:8118|' /etc/privoxy/config && \
     sed -i '/forward-socks5t \//a forward 127.*.*.*/ .' /etc/privoxy/config && \
     sed -i '/forward 172\.30\.42\.\*\//a forward localhost/ .' \
                 /etc/privoxy/config && \
-    echo 'SocksPort 0.0.0.0:1080' >> /etc/tor/torrc && \
-    echo 'Log notice /dev/stdout' >> /etc/tor/torrc && \
+    echo 'SocksPort 1080' >> /etc/tor/torrc && \
     echo 'DataDirectory /var/lib/tor' >> /etc/tor/torrc && \
     echo 'ExitPolicy reject *:*' >> /etc/tor/torrc && \
     echo 'RelayBandwidthRate 10 KB' >> /etc/tor/torrc && \
