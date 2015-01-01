@@ -12,19 +12,54 @@ COPY torproxy.sh /usr/bin/
 RUN sed -i 's|localhost:8118|0.0.0.0:8118|' /etc/privoxy/config && \
     sed -i 's|^logdir /var/log/privoxy|logdir /dev|' /etc/privoxy/config && \
     sed -i 's|^logfile logfile|logfile stdout|' /etc/privoxy/config && \
-    sed -i '/forward *localhost\//a forward-socks5t / 127.0.0.1:1080 .' \
+    sed -i '/forward *localhost\//a forward-socks5t / 127.0.0.1:9050 .' \
                 /etc/privoxy/config && \
-    sed -i '/forward-socks5t \//a forward 172.30.42.*/ .' /etc/privoxy/config&&\
-    sed -i '/forward-socks5t \//a forward 127.*.*.*/ .' /etc/privoxy/config && \
-    sed -i '/forward 172\.30\.42\.\*\//a forward localhost/ .' \
+    sed -i '/^forward-socks5t \//a forward 172.16.*.*/ .' /etc/privoxy/config&&\
+    sed -i '/^forward 172\.16\.\*\.\*\//a forward 172.17.*.*/ .' \
                 /etc/privoxy/config && \
-    echo 'SocksPort 1080' >> /etc/tor/torrc && \
+    sed -i '/^forward 172\.17\.\*\.\*\//a forward 172.18.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.18\.\*\.\*\//a forward 172.19.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.19\.\*\.\*\//a forward 172.20.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.20\.\*\.\*\//a forward 172.21.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.21\.\*\.\*\//a forward 172.22.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.22\.\*\.\*\//a forward 172.23.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.23\.\*\.\*\//a forward 172.24.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.24\.\*\.\*\//a forward 172.25.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.25\.\*\.\*\//a forward 172.26.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.26\.\*\.\*\//a forward 172.27.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.27\.\*\.\*\//a forward 172.28.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.28\.\*\.\*\//a forward 172.29.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.29\.\*\.\*\//a forward 172.30.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.30\.\*\.\*\//a forward 172.31.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 172\.31\.\*\.\*\//a forward 10.*.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 10\.\*\.\*\.\*\//a forward 192.168.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 192\.168\.\*\.\*\//a forward 127.*.*.*/ .' \
+                /etc/privoxy/config && \
+    sed -i '/^forward 127\.\*\.\*\.\*\//a forward localhost/ .' \
+                /etc/privoxy/config && \
+    echo 'SocksPort 9050' >> /etc/tor/torrc && \
     echo 'DataDirectory /var/lib/tor' >> /etc/tor/torrc && \
     echo 'ExitPolicy reject *:*' >> /etc/tor/torrc && \
     echo 'RelayBandwidthRate 10 KB' >> /etc/tor/torrc && \
     echo 'RelayBandwidthBurst 20 KB' >> /etc/tor/torrc
 
-EXPOSE 1080 8118
+EXPOSE 9050 8118
 
 VOLUME ["/var/lib/tor"]
 
