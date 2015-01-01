@@ -72,6 +72,6 @@ elif [[ $# -ge 1 ]]; then
 else
     chmod 0777 /dev/stderr /dev/stdout
     chown -Rh debian-tor. /var/lib/tor
-    su -l debian-tor -c "/usr/sbin/tor --runasdaemon 1" >/dev/null 2>&1
-    /usr/sbin/privoxy --user privoxy --no-daemon /etc/privoxy/config
+    /usr/sbin/privoxy --user privoxy /etc/privoxy/config
+    su -l debian-tor -c "/usr/sbin/tor"
 fi
