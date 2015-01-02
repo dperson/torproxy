@@ -1,10 +1,12 @@
 FROM ubuntu:trusty
 MAINTAINER David Personette <dperson@dperson.com>
 
+ENV DEBIAN_FRONTEND noninteractive
+
 # Install tor and privoxy
-RUN TERM=dumb apt-get update -qq && \
-    TERM=dumb apt-get install -qqy --no-install-recommends tor privoxy && \
-    TERM=dumb apt-get clean && \
+RUN apt-get update -qq && \
+    apt-get install -qqy --no-install-recommends tor privoxy && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/*
 
 # Configure
@@ -59,7 +61,7 @@ RUN sed -i 's|localhost:8118|0.0.0.0:8118|' /etc/privoxy/config && \
     echo 'RelayBandwidthRate 10 KB' >> /etc/tor/torrc && \
     echo 'RelayBandwidthBurst 20 KB' >> /etc/tor/torrc
 
-EXPOSE 9050 8118
+EXPOSE 8118 9050
 
 VOLUME ["/var/lib/tor"]
 
