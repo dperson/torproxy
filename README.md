@@ -48,6 +48,8 @@ tor via the socks protocol directly at `http://hostname:9050`.
 
 ENVIROMENT VARIABLES (only available with `docker run`)
 
+ * `BW` - As above, set a tor relay bandwidth limit in KB, IE `50`
+ * `EXITNODE` - As above, allow tor traffic to access the internet from your IP
  * `TIMEZONE` - As above, set a zoneinfo timezone, IE `EST5EDT`
 
 ## Examples

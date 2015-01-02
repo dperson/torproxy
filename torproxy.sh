@@ -86,6 +86,8 @@ while getopts ":b:eht:" opt; do
 done
 shift $(( OPTIND - 1 ))
 
+[[ "${BW:-""}" ]] && bandwidth "$BW"
+[[ "${EXITNODE:-""}" ]] && exitnode
 [[ "${TIMEZONE:-""}" ]] && timezone "$TIMEZONE"
 
 
