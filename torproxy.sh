@@ -22,9 +22,7 @@ set -o nounset                              # Treat unset variables as an error
 # Arguments:
 #   KiB/s) KiB/s of data that can be relayed
 # Return: Updated configuration file
-bandwidth() {
-    local kbs="${1:-10}"
-
+bandwidth() { local kbs="${1:-10}"
     sed -i '/^RelayBandwidth/d' /etc/tor/torrc
     echo "RelayBandwidthRate $kbs KB" >> /etc/tor/torrc
     echo "RelayBandwidthBurst $(( kbs * 2 )) KB" >> /etc/tor/torrc
@@ -42,9 +40,7 @@ exitnode() {
 # Arguments:
 #   timezone) for example EST5EDT
 # Return: the correct zoneinfo file will be symlinked into place
-timezone() {
-    local timezone="${1:-EST5EDT}"
-
+timezone() { local timezone="${1:-EST5EDT}"
     [[ -e /usr/share/zoneinfo/$timezone ]] || {
         echo "ERROR: invalid timezone specified" >&2
         return
@@ -57,9 +53,7 @@ timezone() {
 # Arguments:
 #   none)
 # Return: Help text
-usage() {
-    local RC=${1:-0}
-
+usage() { local RC=${1:-0}
     echo "Usage: ${0##*/} [-opt] [command]
 Options (fields in '[]' are optional, '<>' are required):
     -h          This help
