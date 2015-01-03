@@ -100,5 +100,5 @@ else
     chmod 0777 /dev/stderr /dev/stdout
     chown -Rh debian-tor. /var/lib/tor
     service tor start
-    /usr/sbin/privoxy --user privoxy --no-daemon /etc/privoxy/config
+    exec /usr/sbin/privoxy --user privoxy --no-daemon /etc/privoxy/config
 fi
