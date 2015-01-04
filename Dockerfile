@@ -4,14 +4,12 @@ MAINTAINER David Personette <dperson@dperson.com>
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install tor and privoxy
+COPY torproxy.sh /usr/bin/
 RUN apt-get update -qq && \
     apt-get install -qqy --no-install-recommends tor privoxy && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/*
-
-# Configure
-COPY torproxy.sh /usr/bin/
-RUN sed -i 's|localhost:8118|0.0.0.0:8118|' /etc/privoxy/config && \
+    rm -rf /var/lib/apt/lists/* /tmp/* && \
+    sed -i 's|localhost:8118|0.0.0.0:8118|' /etc/privoxy/config && \
     sed -i 's|^logdir /var/log/privoxy|logdir /dev|' /etc/privoxy/config && \
     sed -i 's|^logfile logfile|logfile stdout|' /etc/privoxy/config && \
     sed -i '/forward *localhost\//a forward-socks5t / 127.0.0.1:9050 .' \
