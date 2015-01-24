@@ -4,7 +4,6 @@ MAINTAINER David Personette <dperson@dperson.com>
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install tor and privoxy
-COPY torproxy.sh /usr/bin/
 RUN apt-get update -qq && \
     apt-get install -qqy --no-install-recommends tor privoxy && \
     apt-get clean && \
@@ -58,6 +57,7 @@ RUN apt-get update -qq && \
     echo 'ExitPolicy reject *:*' >> /etc/tor/torrc && \
     echo 'RelayBandwidthRate 10 KB' >> /etc/tor/torrc && \
     echo 'RelayBandwidthBurst 20 KB' >> /etc/tor/torrc
+COPY torproxy.sh /usr/bin/
 
 EXPOSE 8118 9050
 

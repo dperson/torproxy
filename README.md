@@ -24,7 +24,7 @@ and removing ads and other obnoxious Internet junk.
 
 ## Exposing the port
 
-    sudo docker run --rm -p 8118:8118 -p 9050:9050 -d dperson/torproxy
+    sudo docker run -p 8118:8118 -p 9050:9050 -d dperson/torproxy
 
 **NOTE**: it will take a while for tor to bootstrap...
 
@@ -59,30 +59,28 @@ Any of the commands can be run at creation with `docker run` or later with
 
 ### Start torproxy with a specified zoneinfo timezone:
 
-    sudo docker run --rm -p 8118:8118 -p 9050:9050 -d dperson/torproxy \
-                -t EST5EDT
+    sudo docker run -p 8118:8118 -p 9050:9050 -d dperson/torproxy -t EST5EDT
 
 OR
 
-    sudo docker run --rm -p 8118:8118 -p 9050:9050 -e TIMEZONE=EST5EDT -d \
+    sudo docker run -p 8118:8118 -p 9050:9050 -e TIMEZONE=EST5EDT -d \
                 dperson/torproxy
 
 ### Start torproxy setting the allowed bandwidth:
 
-    sudo docker run --rm -p 8118:8118 -p 9050:9050 -d dperson/torproxy -b 100
+    sudo docker run -p 8118:8118 -p 9050:9050 -d dperson/torproxy -b 100
 
 OR
 
-    sudo docker run --rm -p 8118:8118 -p 9050:9050 -e BW=100 -d dperson/torproxy
+    sudo docker run -p 8118:8118 -p 9050:9050 -e BW=100 -d dperson/torproxy
 
 ### Start torproxy configuring it to be an exit node:
 
-    sudo docker run --rm -p 8118:8118 -p 9050:9050 -d dperson/torproxy -e
+    sudo docker run -p 8118:8118 -p 9050:9050 -d dperson/torproxy -e
 
 OR
 
-    sudo docker run --rm -p 8118:8118 -p 9050:9050 -e EXITNODE=1 \
-                -d dperson/torproxy
+    sudo docker run -p 8118:8118 -p 9050:9050 -e EXITNODE=1 -d dperson/torproxy
 
 ## Test the proxy:
 
@@ -97,7 +95,7 @@ to copy it from a running container:
 
 Then mount it to a new container like:
 
-    sudo docker run --rm -p 8118:8118 -p 9050:9050 \
+    sudo docker run -p 8118:8118 -p 9050:9050 \
                 -v /some/torrc:/etc/tor/torrc:ro -d dperson/torproxy
 
 # User Feedback
