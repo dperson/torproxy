@@ -6,7 +6,6 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-get update -qq && \
     apt-get install -qqy --no-install-recommends tor privoxy && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* && \
     sed -i 's|localhost:8118|0.0.0.0:8118|' /etc/privoxy/config && \
     sed -i 's|^logdir /var/log/privoxy|logdir /dev|' /etc/privoxy/config && \
     sed -i 's|^logfile logfile|logfile stdout|' /etc/privoxy/config && \
@@ -55,7 +54,8 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     echo 'DataDirectory /var/lib/tor' >> /etc/tor/torrc && \
     echo 'ExitPolicy reject *:*' >> /etc/tor/torrc && \
     echo 'RelayBandwidthRate 10 KB' >> /etc/tor/torrc && \
-    echo 'RelayBandwidthBurst 20 KB' >> /etc/tor/torrc
+    echo 'RelayBandwidthBurst 20 KB' >> /etc/tor/torrc && \
+    rm -rf /var/lib/apt/lists/* /tmp/*
 COPY torproxy.sh /usr/bin/
 
 EXPOSE 8118 9050
