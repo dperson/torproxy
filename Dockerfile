@@ -1,10 +1,9 @@
 FROM ubuntu:trusty
 MAINTAINER David Personette <dperson@dperson.com>
 
-ENV DEBIAN_FRONTEND noninteractive
-
 # Install tor and privoxy
-RUN apt-get update -qq && \
+RUN export DEBIAN_FRONTEND='noninteractive' && \
+    apt-get update -qq && \
     apt-get install -qqy --no-install-recommends tor privoxy && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* && \
