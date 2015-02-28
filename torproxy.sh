@@ -43,7 +43,7 @@ exitnode() {
 # Return: Updated configuration file
 service() { local port="${1:-80}" host="${2:-127.0.0.1:80}" \
             file=/etc/tor/torrc
-    sed -i '/^HiddenServicePort '"$port"'/d' $file
+    sed -i '/^HiddenServicePort '"$port"' /d' $file
     grep -q HiddenServiceDir $file ||
         echo "HiddenServiceDir /var/lib/tor/hidden_service" >> $file
     echo "HiddenServicePort $port $host" >> $file
