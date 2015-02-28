@@ -39,17 +39,22 @@ tor via the socks protocol directly at `http://hostname:9050`.
     Options (fields in '[]' are optional, '<>' are required):
         -h          This help
         -b ""       Configure tor relaying bandwidth in KB/s
-                    possible arg: "[a number]" - # of KB/s to allow
+                    possible arg: "[number]" - # of KB/s to allow
         -e          Allow this to be an exit node for tor traffic
+        -s "<port>;<host:port>" Configure tor hidden service
+                    required args: "<port>;<host:port>"
+                    <port> - port for .onion service to listen on
+                    <host:port> - destination for service request
         -t ""       Configure timezone
                     possible arg: "[timezone]" - zoneinfo timezone for container
 
-        The 'command' (if provided and valid) will be run instead of torproxy
+    The 'command' (if provided and valid) will be run instead of torproxy
 
 ENVIROMENT VARIABLES (only available with `docker run`)
 
  * `BW` - As above, set a tor relay bandwidth limit in KB, IE `50`
  * `EXITNODE` - As above, allow tor traffic to access the internet from your IP
+ * `SERVICE - As above, configure hidden service, IE '80;hostname:80'
  * `TIMEZONE` - As above, set a zoneinfo timezone, IE `EST5EDT`
 
 ## Examples

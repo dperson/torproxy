@@ -22,18 +22,18 @@ set -o nounset                              # Treat unset variables as an error
 # Arguments:
 #   KiB/s) KiB/s of data that can be relayed
 # Return: Updated configuration file
-bandwidth() { local kbs="${1:-10}"
-    sed -i '/^RelayBandwidth/d' /etc/tor/torrc
-    echo "RelayBandwidthRate $kbs KB" >> /etc/tor/torrc
-    echo "RelayBandwidthBurst $(( kbs * 2 )) KB" >> /etc/tor/torrc
+bandwidth() { local kbs="${1:-10}" file=/etc/tor/torrc
+    sed -i '/^RelayBandwidth/d' $file
+    echo "RelayBandwidthRate $kbs KB" >> $file
+    echo "RelayBandwidthBurst $(( kbs * 2 )) KB" >> $file
 }
 
 ### exitnode: Allow exit traffic
 # Arguments:
 #   N/A)
 # Return: Updated configuration file
-exitnode() {
-    sed -i '/^ExitPolicy/d' /etc/tor/torrc
+exitnode() { local file=/etc/tor/torrc
+    sed -i '/^ExitPolicy/d' $file
 }
 
 ### service: setup a hidden service
@@ -41,10 +41,9 @@ exitnode() {
 #   port) port to connect to service
 #   host) host:port where service is running
 # Return: Updated configuration file
-service() { local port="${1:-80}" host="${2:-127.0.0.1:80}" \
-            file=/etc/tor/torrc
+service() { local port="$1" host="$2" file=/etc/tor/torrc
     sed -i '/^HiddenServicePort '"$port"' /d' $file
-    grep -q HiddenServiceDir $file ||
+    grep -q '^HiddenServiceDir' $file ||
         echo "HiddenServiceDir /var/lib/tor/hidden_service" >> $file
     echo "HiddenServicePort $port $host" >> $file
 }
@@ -73,9 +72,10 @@ Options (fields in '[]' are optional, '<>' are required):
     -b \"\"       Configure tor relaying bandwidth in KB/s
                 possible arg: \"[number]\" - # of KB/s to allow
     -e          Allow this to be an exit node for tor traffic
-    -s \"\"       Configure tor hidden service
-                possible arg: \"[port]\" - port for .onion service to listen on
-                possible arg: \"[host:port]\" - destination for service request
+    -s \"<port>;<host:port>\" Configure tor hidden service
+                required args: \"<port>;<host:port>\"
+                <port> - port for .onion service to listen on
+                <host:port> - destination for service request
     -t \"\"       Configure timezone
                 possible arg: \"[timezone]\" - zoneinfo timezone for container
 
