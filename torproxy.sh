@@ -36,12 +36,12 @@ exitnode() { local file=/etc/tor/torrc
     sed -i '/^ExitPolicy/d' $file
 }
 
-### service: setup a hidden service
+### hidden_service: setup a hidden service
 # Arguments:
 #   port) port to connect to service
 #   host) host:port where service is running
 # Return: Updated configuration file
-service() { local port="$1" host="$2" file=/etc/tor/torrc
+hidden_service() { local port="$1" host="$2" file=/etc/tor/torrc
     sed -i '/^HiddenServicePort '"$port"' /d' $file
     grep -q '^HiddenServiceDir' $file ||
         echo "HiddenServiceDir /var/lib/tor/hidden_service" >> $file
@@ -89,7 +89,7 @@ while getopts ":b:es:ht:" opt; do
         h) usage ;;
         b) bandwidth "$OPTARG" ;;
         e) exitnode ;;
-        s) eval service $(sed 's/^\|$/"/g; s/;/" "/g' <<< $OPTARG) ;;
+        s) eval hidden_service $(sed 's/^\|$/"/g; s/;/" "/g' <<< $OPTARG) ;;
         t) timezone "$OPTARG" ;;
         "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
         ":") echo "No argument value for option: -$OPTARG"; usage 2 ;;
@@ -100,7 +100,7 @@ shift $(( OPTIND - 1 ))
 [[ "${BW:-""}" ]] && bandwidth "$BW"
 [[ "${EXITNODE:-""}" ]] && exitnode
 [[ "${TIMEZONE:-""}" ]] && timezone "$TIMEZONE"
-[[ "${SERVICE:-""}" ]] && eval service \
+[[ "${SERVICE:-""}" ]] && eval hidden_service \
             $(sed 's/^\|$/"/g; s/;/" "/g' <<< $SERVICE)
 chown -Rh debian-tor. /var/lib/tor
 
