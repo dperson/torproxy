@@ -36,6 +36,19 @@ exitnode() {
     sed -i '/^ExitPolicy/d' /etc/tor/torrc
 }
 
+### service: setup a hidden service
+# Arguments:
+#   port) port to connect to service
+#   host) host:port where service is running
+# Return: Updated configuration file
+service() { local port="${1:-80}" host="${2:-127.0.0.1:80}" \
+            file=/etc/tor/torrc
+    sed -i '/^HiddenServicePort '"$port"'/d' $file
+    grep -q HiddenServiceDir $file ||
+        echo "HiddenServiceDir /var/lib/tor/hidden_service" >> $file
+    echo "HiddenServicePort $port $host" >> $file
+}
+
 ### timezone: Set the timezone for the container
 # Arguments:
 #   timezone) for example EST5EDT
@@ -58,8 +71,11 @@ usage() { local RC=${1:-0}
 Options (fields in '[]' are optional, '<>' are required):
     -h          This help
     -b \"\"       Configure tor relaying bandwidth in KB/s
-                possible arg: \"[a number]\" - # of KB/s to allow
+                possible arg: \"[number]\" - # of KB/s to allow
     -e          Allow this to be an exit node for tor traffic
+    -s \"\"       Configure tor hidden service
+                possible arg: \"[port]\" - port for .onion service to listen on
+                possible arg: \"[host:port]\" - destination for service request
     -t \"\"       Configure timezone
                 possible arg: \"[timezone]\" - zoneinfo timezone for container
 
@@ -68,11 +84,12 @@ The 'command' (if provided and valid) will be run instead of torproxy
     exit $RC
 }
 
-while getopts ":b:eht:" opt; do
+while getopts ":b:es:ht:" opt; do
     case "$opt" in
         h) usage ;;
         b) bandwidth "$OPTARG" ;;
         e) exitnode ;;
+        s) eval service $(sed 's/^\|$/"/g; s/;/" "/g' <<< $OPTARG) ;;
         t) timezone "$OPTARG" ;;
         "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
         ":") echo "No argument value for option: -$OPTARG"; usage 2 ;;
@@ -83,7 +100,9 @@ shift $(( OPTIND - 1 ))
 [[ "${BW:-""}" ]] && bandwidth "$BW"
 [[ "${EXITNODE:-""}" ]] && exitnode
 [[ "${TIMEZONE:-""}" ]] && timezone "$TIMEZONE"
-
+[[ "${SERVICE:-""}" ]] && eval service \
+            $(sed 's/^\|$/"/g; s/;/" "/g' <<< $SERVICE)
+chown -Rh debian-tor. /var/lib/tor
 
 if [[ $# -ge 1 && -x $(which $1 2>&-) ]]; then
     exec "$@"
