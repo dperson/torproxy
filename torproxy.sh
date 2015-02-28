@@ -113,5 +113,8 @@ else
     chmod 0777 /dev/stderr /dev/stdout
     chown -Rh debian-tor. /var/lib/tor
     service tor start
+    [[ -e /srv/tor/hidden_service/hostname ]] && {
+        echo -en "\nHidden service hostname: "
+        cat /srv/tor/hidden_service/hostname; echo; }
     exec /usr/sbin/privoxy --user privoxy --no-daemon /etc/privoxy/config
 fi
