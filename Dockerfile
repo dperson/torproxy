@@ -57,6 +57,7 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     echo 'SocksPort 9050' >> /etc/tor/torrc && \
     echo 'DataDirectory /var/lib/tor' >> /etc/tor/torrc && \
     echo 'ExitPolicy reject *:*' >> /etc/tor/torrc && \
+    echo 'Log notice file /dev/stdout' >> /etc/tor/torrc && \
     echo 'RelayBandwidthRate 10 KB' >> /etc/tor/torrc && \
     echo 'RelayBandwidthBurst 20 KB' >> /etc/tor/torrc && \
     rm -rf /var/lib/apt/lists/* /tmp/*

@@ -110,7 +110,6 @@ elif [[ $# -ge 1 ]]; then
     echo "ERROR: command not found: $1"
     exit 13
 else
-    chmod 0777 /dev/stderr /dev/stdout
     chown -Rh debian-tor. /var/lib/tor
     service tor start
     [[ -e /srv/tor/hidden_service/hostname ]] && {
