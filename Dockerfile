@@ -8,7 +8,8 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     echo -n "deb http://deb.torproject.org/torproject.org jessie main" >> \
                 /etc/apt/sources.list && \
     apt-get update -qq && \
-    apt-get install -qqy --no-install-recommends tor privoxy && \
+    apt-get install -qqy --no-install-recommends tor privoxy \
+                $(apt-get -s dist-upgrade|awk '/^Inst.*ecurity/ {print $2}') &&\
     apt-get clean && \
     sed -i 's|localhost:8118|0.0.0.0:8118|' /etc/privoxy/config && \
     sed -i 's|^logdir /var/log/privoxy|logdir /dev|' /etc/privoxy/config && \
