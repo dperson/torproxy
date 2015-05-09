@@ -11,9 +11,10 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-get install -qqy --no-install-recommends tor privoxy \
                 $(apt-get -s dist-upgrade|awk '/^Inst.*ecurity/ {print $2}') &&\
     apt-get clean && \
+    sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' /etc/privoxy/config &&\
     sed -i 's|localhost:8118|0.0.0.0:8118|' /etc/privoxy/config && \
-    sed -i 's|^logdir /var/log/privoxy|logdir /dev|' /etc/privoxy/config && \
-    sed -i 's|^logfile logfile|logfile stdout|' /etc/privoxy/config && \
+    sed -i 's|^\(logdir\) .*|\1 /dev|' /etc/privoxy/config && \
+    sed -i 's|^\(logfile\) .*|\1 stdout|' /etc/privoxy/config && \
     sed -i '/forward *localhost\//a forward-socks5t / 127.0.0.1:9050 .' \
                 /etc/privoxy/config && \
     sed -i '/^forward-socks5t \//a forward 172.16.*.*/ .' /etc/privoxy/config&&\
