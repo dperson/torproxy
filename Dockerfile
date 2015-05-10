@@ -56,6 +56,7 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
                 /etc/privoxy/config && \
     sed -i '/^forward 127\.\*\.\*\.\*\//a forward localhost/ .' \
                 /etc/privoxy/config && \
+    echo 'Log notice stdout' >> /etc/tor/torrc && \
     echo 'SocksPort 0.0.0.0:9050 IsolateDestAddr' >> /etc/tor/torrc && \
     echo 'DataDirectory /var/lib/tor' >> /etc/tor/torrc && \
     echo 'ExitPolicy reject *:*' >> /etc/tor/torrc && \
