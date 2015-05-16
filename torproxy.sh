@@ -104,7 +104,9 @@ shift $(( OPTIND - 1 ))
             $(sed 's/^\|$/"/g; s/;/" "/g' <<< $SERVICE)
 chown -Rh debian-tor. /var/lib/tor
 
-if [[ $# -ge 1 && -x $(which $1 2>&-) ]]; then
+if ps -ef | grep -q tor; then
+    echo "Service already running, please restart container to apply changes"
+elif [[ $# -ge 1 && -x $(which $1 2>&-) ]]; then
     exec "$@"
 elif [[ $# -ge 1 ]]; then
     echo "ERROR: command not found: $1"
