@@ -104,13 +104,13 @@ shift $(( OPTIND - 1 ))
             $(sed 's/^\|$/"/g; s/;/" "/g' <<< $SERVICE)
 chown -Rh debian-tor. /var/lib/tor
 
-if ps -ef | egrep -v 'grep|torproxy.sh' | grep -q tor; then
-    echo "Service already running, please restart container to apply changes"
-elif [[ $# -ge 1 && -x $(which $1 2>&-) ]]; then
+if [[ $# -ge 1 && -x $(which $1 2>&-) ]]; then
     exec "$@"
 elif [[ $# -ge 1 ]]; then
     echo "ERROR: command not found: $1"
     exit 13
+elif ps -ef | egrep -v 'grep|torproxy.sh' | grep -q tor; then
+    echo "Service already running, please restart container to apply changes"
 else
     chown -Rh debian-tor. /var/lib/tor
     service tor start
