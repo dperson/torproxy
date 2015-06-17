@@ -108,5 +108,15 @@ Then mount it to a new container like:
 
 ## Issues
 
+### tor failures (exits or won't connect)
+
+If you are affected by this issue (a small percentage of users are) please try
+setting the TORUSER environment variable to root, IE:
+
+    sudo docker run -p 8118:8118 -p 9050:9050 -e TORUSER=root -d \
+                dperson/torproxy
+
+### Reporting
+
 If you have any problems with or questions about this image, please contact me
 through a [GitHub issue](https://github.com/dperson/torproxy/issues).
