@@ -52,6 +52,7 @@ tor via the socks protocol directly at `http://hostname:9050`.
 
 ENVIROMENT VARIABLES (only available with `docker run`)
 
+ * `TORUSER` - If set use named user instead of 'debian-tor' (for example root)
  * `BW` - As above, set a tor relay bandwidth limit in KB, IE `50`
  * `EXITNODE` - As above, allow tor traffic to access the internet from your IP
  * `SERVICE - As above, configure hidden service, IE '80;hostname:80'
