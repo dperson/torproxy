@@ -20,7 +20,10 @@ and removing ads and other obnoxious Internet junk.
 
 # How to use this image
 
-**NOTE**: this image is setup by default to be a relay only (not an exit node)
+**NOTE 1**: this image is setup by default to be a relay only (not an exit node)
+
+**NOTE 2**: this image now supports relaying all traffic through the container,
+see: [tor-route-all-traffic.sh](https://github.com/dperson/torproxy/blob/master/tor-route-all-traffic.sh)
 
 ## Exposing the port
 

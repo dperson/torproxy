@@ -61,6 +61,10 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     echo 'ExitPolicy reject *:*' >> /etc/tor/torrc && \
     echo 'RelayBandwidthRate 10 KB' >> /etc/tor/torrc && \
     echo 'RelayBandwidthBurst 20 KB' >> /etc/tor/torrc && \
+    echo 'VirtualAddrNetworkIPv4 10.192.0.0/10' >> /etc/tor/torrc && \
+    echo 'AutomapHostsOnResolve 1' >> /etc/tor/torrc && \
+    echo 'TransPort 9040' >> /etc/tor/torrc && \
+    echo 'DNSPort 5353' >> /etc/tor/torrc && \
     rm -rf /var/lib/apt/lists/* /tmp/*
     #echo 'Log notice file /dev/stdout' >> /etc/tor/torrc && \
 COPY torproxy.sh /usr/bin/
