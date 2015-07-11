@@ -10,7 +10,6 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-get update -qq && \
     apt-get install -qqy --no-install-recommends tor privoxy \
                 $(apt-get -s dist-upgrade|awk '/^Inst.*ecurity/ {print $2}') &&\
-    apt-get clean && \
     sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' /etc/privoxy/config &&\
     sed -i 's|localhost:8118|0.0.0.0:8118|' /etc/privoxy/config && \
     sed -i 's|^\(logdir\) .*|\1 /dev|' /etc/privoxy/config && \
@@ -65,6 +64,8 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     echo 'AutomapHostsOnResolve 1' >> /etc/tor/torrc && \
     echo 'TransPort 9040' >> /etc/tor/torrc && \
     echo 'DNSPort 5353' >> /etc/tor/torrc && \
+    chown -Rh debian-tor. /var/lib/tor && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/*
     #echo 'Log notice file /dev/stdout' >> /etc/tor/torrc && \
 COPY torproxy.sh /usr/bin/

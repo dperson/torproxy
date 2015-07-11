@@ -114,7 +114,6 @@ elif [[ $# -ge 1 ]]; then
 elif ps -ef | egrep -v 'grep|torproxy.sh' | grep -q tor; then
     echo "Service already running, please restart container to apply changes"
 else
-    chown -Rh debian-tor. /var/lib/tor
     su -l ${TORUSER:-debian-tor} -s /bin/bash -c "exec /usr/bin/tor \
                 --defaults-torrc /usr/share/tor/tor-service-defaults-torrc"
     [[ -e /srv/tor/hidden_service/hostname ]] && {
