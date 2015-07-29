@@ -5,7 +5,7 @@ MAINTAINER David Personette <dperson@dperson.com>
 RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-key adv --keyserver pgp.mit.edu --recv-keys \
                 A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 && \
-    echo -n "deb http://deb.torproject.org/torproject.org jessie main" >> \
+    /bin/echo -n "deb http://deb.torproject.org/torproject.org jessie main" >> \
                 /etc/apt/sources.list && \
     apt-get update -qq && \
     apt-get install -qqy --no-install-recommends tor privoxy \
