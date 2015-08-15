@@ -1,4 +1,4 @@
-[![logo](http://allthingsd.com/files/2013/10/tor-logo.png)](https://torproject.org/)
+[![logo](https://raw.githubusercontent.com/dperson/torproxy/master/logo.png)](https://torproject.org/)
 
 # Tor and Privoxy
 
