@@ -54,11 +54,15 @@ hidden_service() { local port="$1" host="$2" file=/etc/tor/torrc
 # Return: the correct zoneinfo file will be symlinked into place
 timezone() { local timezone="${1:-EST5EDT}"
     [[ -e /usr/share/zoneinfo/$timezone ]] || {
-        echo "ERROR: invalid timezone specified" >&2
+        echo "ERROR: invalid timezone specified: $timezone" >&2
         return
     }
 
-    ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
+    if [[ $(cat /etc/timezone) != $timezone ]]; then
+        echo "$timezone" > /etc/timezone
+        ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
+        dpkg-reconfigure -f noninteractive tzdata
+    fi
 }
 
 ### usage: Help
@@ -101,7 +105,7 @@ shift $(( OPTIND - 1 ))
 
 [[ "${BW:-""}" ]] && bandwidth "$BW"
 [[ "${EXITNODE:-""}" ]] && exitnode
-[[ "${TIMEZONE:-""}" ]] && timezone "$TIMEZONE"
+[[ "${TZ:-""}" ]] && timezone "$TZ"
 [[ "${SERVICE:-""}" ]] && eval hidden_service \
             $(sed 's/^\|$/"/g; s/;/" "/g' <<< $SERVICE)
 chown -Rh debian-tor. /var/lib/tor

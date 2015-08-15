@@ -59,21 +59,26 @@ ENVIROMENT VARIABLES (only available with `docker run`)
  * `BW` - As above, set a tor relay bandwidth limit in KB, IE `50`
  * `EXITNODE` - As above, allow tor traffic to access the internet from your IP
  * `SERVICE - As above, configure hidden service, IE '80;hostname:80'
- * `TIMEZONE` - As above, set a zoneinfo timezone, IE `EST5EDT`
+ * `TZ` - As above, set a zoneinfo timezone, IE `EST5EDT`
 
 ## Examples
 
 Any of the commands can be run at creation with `docker run` or later with
 `docker exec torproxy.sh` (as of version 1.3 of docker).
 
-### Start torproxy with a specified zoneinfo timezone:
+### Setting the Timezone
 
     sudo docker run -p 8118:8118 -p 9050:9050 -d dperson/torproxy -t EST5EDT
 
-OR
+OR using `environment variables`
 
-    sudo docker run -p 8118:8118 -p 9050:9050 -e TIMEZONE=EST5EDT -d \
-                dperson/torproxy
+    sudo docker run -p 8118:8118 -p 9050:9050 -e TZ=EST5EDT -d dperson/torproxy
+
+Will get you the same settings as
+
+    sudo docker run --name tor -p 8118:8118 -p 9050:9050 -d dperson/torproxy
+    sudo docker exec tor torproxy.sh -t EST5EDT ls -AlF /etc/localtime
+    sudo docker restart tor
 
 ### Start torproxy setting the allowed bandwidth:
 
