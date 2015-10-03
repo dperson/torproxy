@@ -59,7 +59,9 @@ ENVIROMENT VARIABLES (only available with `docker run`)
  * `BW` - As above, set a tor relay bandwidth limit in KB, IE `50`
  * `EXITNODE` - As above, allow tor traffic to access the internet from your IP
  * `SERVICE - As above, configure hidden service, IE '80;hostname:80'
- * `TZ` - As above, set a zoneinfo timezone, IE `EST5EDT`
+ * `TZ` - As above, configure the zoneinfo timezone, IE `EST5EDT`
+ * `USERID` - Set the UID for the app user
+ * `GROUPID` - Set the GID for the app user
 
 ## Examples
 
