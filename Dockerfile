@@ -5,8 +5,8 @@ MAINTAINER David Personette <dperson@dperson.com>
 RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-key adv --keyserver pgp.mit.edu --recv-keys \
                 A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 && \
-    /bin/echo -n "deb http://deb.torproject.org/torproject.org jessie main" >> \
-                /etc/apt/sources.list && \
+    /bin/echo -n "deb http://deb.torproject.org/torproject.org jessie main" \
+                >>/etc/apt/sources.list && \
     apt-get update -qq && \
     apt-get install -qqy --no-install-recommends tor privoxy \
                 $(apt-get -s dist-upgrade|awk '/^Inst.*ecurity/ {print $2}') &&\
@@ -55,19 +55,19 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
                 /etc/privoxy/config && \
     sed -i '/^forward 127\.\*\.\*\.\*\//a forward localhost/ .' \
                 /etc/privoxy/config && \
-    echo 'SocksPort 0.0.0.0:9050 IsolateDestAddr' >> /etc/tor/torrc && \
-    echo 'DataDirectory /var/lib/tor' >> /etc/tor/torrc && \
-    echo 'ExitPolicy reject *:*' >> /etc/tor/torrc && \
-    echo 'RelayBandwidthRate 10 KB' >> /etc/tor/torrc && \
-    echo 'RelayBandwidthBurst 20 KB' >> /etc/tor/torrc && \
-    echo 'VirtualAddrNetworkIPv4 10.192.0.0/10' >> /etc/tor/torrc && \
-    echo 'AutomapHostsOnResolve 1' >> /etc/tor/torrc && \
-    echo 'TransPort 9040' >> /etc/tor/torrc && \
-    echo 'DNSPort 5353' >> /etc/tor/torrc && \
+    echo 'SocksPort 0.0.0.0:9050 IsolateDestAddr' >>/etc/tor/torrc && \
+    echo 'DataDirectory /var/lib/tor' >>/etc/tor/torrc && \
+    echo 'ExitPolicy reject *:*' >>/etc/tor/torrc && \
+    echo 'RelayBandwidthRate 10 KB' >>/etc/tor/torrc && \
+    echo 'RelayBandwidthBurst 20 KB' >>/etc/tor/torrc && \
+    echo 'VirtualAddrNetworkIPv4 10.192.0.0/10' >>/etc/tor/torrc && \
+    echo 'AutomapHostsOnResolve 1' >>/etc/tor/torrc && \
+    echo 'TransPort 9040' >>/etc/tor/torrc && \
+    echo 'DNSPort 5353' >>/etc/tor/torrc && \
     chown -Rh debian-tor. /var/lib/tor && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/*
-    #echo 'Log notice file /dev/stdout' >> /etc/tor/torrc && \
+    #echo 'Log notice file /dev/stdout' >>/etc/tor/torrc && \
 COPY torproxy.sh /usr/bin/
 
 EXPOSE 8118 9050
