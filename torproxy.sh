@@ -24,8 +24,8 @@ set -o nounset                              # Treat unset variables as an error
 # Return: Updated configuration file
 bandwidth() { local kbs="${1:-10}" file=/etc/tor/torrc
     sed -i '/^RelayBandwidth/d' $file
-    echo "RelayBandwidthRate $kbs KB" >> $file
-    echo "RelayBandwidthBurst $(( kbs * 2 )) KB" >> $file
+    echo "RelayBandwidthRate $kbs KB" >>$file
+    echo "RelayBandwidthBurst $(( kbs * 2 )) KB" >>$file
 }
 
 ### exitnode: Allow exit traffic
@@ -44,8 +44,8 @@ exitnode() { local file=/etc/tor/torrc
 hidden_service() { local port="$1" host="$2" file=/etc/tor/torrc
     sed -i '/^HiddenServicePort '"$port"' /d' $file
     grep -q '^HiddenServiceDir' $file ||
-        echo "HiddenServiceDir /var/lib/tor/hidden_service" >> $file
-    echo "HiddenServicePort $port $host" >> $file
+        echo "HiddenServiceDir /var/lib/tor/hidden_service" >>$file
+    echo "HiddenServicePort $port $host" >>$file
 }
 
 ### timezone: Set the timezone for the container
@@ -59,7 +59,7 @@ timezone() { local timezone="${1:-EST5EDT}"
     }
 
     if [[ $(cat /etc/timezone) != $timezone ]]; then
-        echo "$timezone" > /etc/timezone
+        echo "$timezone" >/etc/timezone
         ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
         dpkg-reconfigure -f noninteractive tzdata >/dev/null 2>&1
     fi
