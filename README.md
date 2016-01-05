@@ -53,7 +53,7 @@ tor via the socks protocol directly at `http://hostname:9050`.
 
     The 'command' (if provided and valid) will be run instead of torproxy
 
-ENVIROMENT VARIABLES (only available with `docker run`)
+ENVIRONMENT VARIABLES (only available with `docker run`)
 
  * `TORUSER` - If set use named user instead of 'debian-tor' (for example root)
  * `BW` - As above, set a tor relay bandwidth limit in KB, IE `50`
