@@ -88,8 +88,6 @@ The 'command' (if provided and valid) will be run instead of torproxy
     exit $RC
 }
 
-cd /tmp
-
 while getopts ":b:es:ht:" opt; do
     case "$opt" in
         h) usage ;;
