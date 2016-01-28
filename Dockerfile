@@ -64,7 +64,9 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     echo 'AutomapHostsOnResolve 1' >>/etc/tor/torrc && \
     echo 'TransPort 9040' >>/etc/tor/torrc && \
     echo 'DNSPort 5353' >>/etc/tor/torrc && \
-    chown -Rh debian-tor. /var/lib/tor && \
+    mkdir -p /var/run/tor && \
+    chown -Rh debian-tor. /var/lib/tor /var/run/tor && \
+    chmod -Rh 0750 /var/run/tor && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/*
     #echo 'Log notice file /dev/stdout' >>/etc/tor/torrc && \
