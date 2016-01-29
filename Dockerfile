@@ -63,14 +63,15 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     echo 'Log notice file /dev/stdout' >>/etc/tor/torrc && \
     echo 'RunAsDaemon 1' >>/etc/tor/torrc && \
     echo 'DataDirectory /var/lib/tor' >>/etc/tor/torrc && \
+    echo 'AutomapHostsOnResolve 1' >>/etc/tor/torrc && \
     echo 'ExitPolicy reject *:*' >>/etc/tor/torrc && \
     echo 'RelayBandwidthRate 10 KB' >>/etc/tor/torrc && \
     echo 'RelayBandwidthBurst 20 KB' >>/etc/tor/torrc && \
     echo 'VirtualAddrNetworkIPv4 10.192.0.0/10' >>/etc/tor/torrc && \
-    echo 'AutomapHostsOnResolve 1' >>/etc/tor/torrc && \
+    echo 'DNSPort 5353' >>/etc/tor/torrc && \
     echo 'SocksPort 0.0.0.0:9050 IsolateDestAddr' >>/etc/tor/torrc && \
     echo 'TransPort 9040' >>/etc/tor/torrc && \
-    echo 'DNSPort 5353' >>/etc/tor/torrc && \
+    echo 'User debian-tor' >>/etc/tor/torrc && \
     mkdir -p /var/run/tor && \
     chown -Rh debian-tor. /var/lib/tor /var/run/tor && \
     chmod 0750 /var/run/tor && \
