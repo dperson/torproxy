@@ -60,7 +60,6 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     echo 'CookieAuthentication 1' >>/etc/tor/torrc && \
     echo 'CookieAuthFileGroupReadable 1' >>/etc/tor/torrc && \
     echo 'CookieAuthFile /var/run/tor/control.authcookie' >>/etc/tor/torrc && \
-    echo 'Log notice file /dev/stdout' >>/etc/tor/torrc && \
     echo 'RunAsDaemon 1' >>/etc/tor/torrc && \
     echo 'DataDirectory /var/lib/tor' >>/etc/tor/torrc && \
     echo 'AutomapHostsOnResolve 1' >>/etc/tor/torrc && \
@@ -77,6 +76,7 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     chmod 0750 /var/run/tor && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/*
+    # echo 'Log notice file /dev/stdout' >>/etc/tor/torrc && \
 COPY torproxy.sh /usr/bin/
 
 EXPOSE 8118 9050
