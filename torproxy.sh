@@ -119,9 +119,9 @@ elif [[ $# -ge 1 ]]; then
 elif ps -ef | egrep -v 'grep|torproxy.sh' | grep -q tor; then
     echo "Service already running, please restart container to apply changes"
 else
-    /usr/bin/tor
     [[ -e /srv/tor/hidden_service/hostname ]] && {
         echo -en "\nHidden service hostname: "
         cat /srv/tor/hidden_service/hostname; echo; }
-    exec /usr/sbin/privoxy --user privoxy --no-daemon /etc/privoxy/config
+    /usr/sbin/privoxy --user privoxy /etc/privoxy/config
+    exec /usr/bin/tor
 fi
