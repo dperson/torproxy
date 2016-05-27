@@ -81,6 +81,6 @@ COPY torproxy.sh /usr/bin/
 
 EXPOSE 8118 9050
 
-VOLUME ["/etc/tor"]
+VOLUME ["/etc/tor", "/var/lib/tor"]
 
 ENTRYPOINT ["torproxy.sh"]
