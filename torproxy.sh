@@ -109,7 +109,9 @@ shift $(( OPTIND - 1 ))
 [[ "${USERID:-""}" =~ ^[0-9]+$ ]] && usermod -u $USERID -o debian-tor
 [[ "${GROUPID:-""}" =~ ^[0-9]+$ ]] && groupmod -g $GROUPID -o debian-tor
 
-chown -Rh debian-tor. /var/lib/tor /var/log/tor 2>&1 | grep -iv 'Read-only' || :
+mkdir -p /run/tor
+chown -Rh debian-tor. /run/tor /var/lib/tor /var/log/tor 2>&1 |
+            grep -iv 'Read-only' || :
 
 if [[ $# -ge 1 && -x $(which $1 2>&-) ]]; then
     exec "$@"
