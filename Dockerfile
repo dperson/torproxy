@@ -55,11 +55,11 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
                 /etc/privoxy/config && \
     sed -i '/^forward 127\.\*\.\*\.\*\//a forward localhost/ .' \
                 /etc/privoxy/config && \
-    echo 'ControlSocket /var/run/tor/control' >>/etc/tor/torrc && \
+    echo 'ControlSocket /etc/tor/run/control' >>/etc/tor/torrc && \
     echo 'ControlSocketsGroupWritable 1' >>/etc/tor/torrc && \
     echo 'CookieAuthentication 1' >>/etc/tor/torrc && \
     echo 'CookieAuthFileGroupReadable 1' >>/etc/tor/torrc && \
-    echo 'CookieAuthFile /var/run/tor/control.authcookie' >>/etc/tor/torrc && \
+    echo 'CookieAuthFile /etc/tor/run/control.authcookie' >>/etc/tor/torrc && \
     echo 'RunAsDaemon 1' >>/etc/tor/torrc && \
     echo 'DataDirectory /var/lib/tor' >>/etc/tor/torrc && \
     echo 'AutomapHostsOnResolve 1' >>/etc/tor/torrc && \
@@ -71,9 +71,9 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     echo 'SocksPort 0.0.0.0:9050 IsolateDestAddr' >>/etc/tor/torrc && \
     echo 'TransPort 9040' >>/etc/tor/torrc && \
     echo 'User debian-tor' >>/etc/tor/torrc && \
-    mkdir -p /var/run/tor && \
-    chown -Rh debian-tor. /var/lib/tor /var/run/tor && \
-    chmod 0750 /var/run/tor && \
+    mkdir -p /etc/tor/run && \
+    chown -Rh debian-tor. /var/lib/tor /etc/tor/run && \
+    chmod 0750 /etc/tor/run && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/*
     # echo 'Log notice file /dev/stdout' >>/etc/tor/torrc && \
