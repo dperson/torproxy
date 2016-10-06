@@ -57,6 +57,7 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
                 /etc/privoxy/config && \
     echo 'ControlSocket /etc/tor/run/control' >>/etc/tor/torrc && \
     echo 'ControlSocketsGroupWritable 1' >>/etc/tor/torrc && \
+    echo 'ControlPort 9051' >>/etc/tor/torrc && \
     echo 'CookieAuthentication 1' >>/etc/tor/torrc && \
     echo 'CookieAuthFileGroupReadable 1' >>/etc/tor/torrc && \
     echo 'CookieAuthFile /etc/tor/run/control.authcookie' >>/etc/tor/torrc && \
@@ -79,7 +80,7 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     #echo 'Log notice file /dev/stdout' >>/etc/tor/torrc && \
 COPY torproxy.sh /usr/bin/
 
-EXPOSE 8118 9050
+EXPOSE 8118 9050 9051
 
 VOLUME ["/etc/tor", "/var/lib/tor"]
 
