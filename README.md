@@ -63,6 +63,11 @@ ENVIRONMENT VARIABLES (only available with `docker run`)
  * `USERID` - Set the UID for the app user
  * `GROUPID` - Set the GID for the app user
 
+Other environment variables beginning with `TOR_` will edit the configuration
+file accordingly:
+
+ * `TOR_NewCircuitPeriod=400` will translate to `NewCircuitPeriod 10`
+
 ## Examples
 
 Any of the commands can be run at creation with `docker run` or later with

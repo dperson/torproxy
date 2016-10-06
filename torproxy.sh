@@ -108,6 +108,16 @@ shift $(( OPTIND - 1 ))
             $(sed 's/^\|$/"/g; s/;/" "/g' <<< $SERVICE)
 [[ "${USERID:-""}" =~ ^[0-9]+$ ]] && usermod -u $USERID -o debian-tor
 [[ "${GROUPID:-""}" =~ ^[0-9]+$ ]] && groupmod -g $GROUPID -o debian-tor
+for env in $(printenv | grep '^TOR_'); do
+    name=$(cut -c4- <<< ${env%%=*})
+    val="\"${env##*=}\""
+    [[ "$val" =~ ^\"([0-9]+|false|true)\"$ ]] && val=$(sed 's|"||g' <<<$val)
+    if grep -q "^$name" /etc/tor/torrc; then
+        sed -i "/^$name/s| .*| $val|" /etc/tor/torrc
+    else
+        echo "$name $val" >>/etc/tor/torrc
+    fi
+done
 
 chown -Rh debian-tor. /var/lib/tor /var/log/tor 2>&1 | grep -iv 'Read-only' || :
 
