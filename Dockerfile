@@ -1,11 +1,11 @@
-FROM debian:jessie
+FROM debian:stretch
 MAINTAINER David Personette <dperson@gmail.com>
 
 # Install tor and privoxy
 RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-key adv --keyserver pgp.mit.edu --recv-keys \
                 A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 && \
-    /bin/echo -n "deb http://deb.torproject.org/torproject.org jessie main" \
+    /bin/echo -n "deb http://deb.torproject.org/torproject.org stretch main" \
                 >>/etc/apt/sources.list && \
     apt-get update -qq && \
     apt-get install -qqy --no-install-recommends tor privoxy \
