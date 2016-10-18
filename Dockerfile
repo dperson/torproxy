@@ -77,6 +77,7 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     mkdir -p /etc/tor/run && \
     chown -Rh debian-tor. /var/lib/tor /etc/tor/run && \
     chmod 0750 /etc/tor/run && \
+    apt-get purge -qqy gnupg1 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/*
     #echo 'Log notice file /dev/stdout' >>/etc/tor/torrc && \
