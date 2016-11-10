@@ -31,7 +31,7 @@ see: [tor-route-all-traffic.sh](https://github.com/dperson/torproxy/blob/master/
 
 **NOTE**: it will take a while for tor to bootstrap...
 
-Then you can hit privoxy web proxy at `http://host-ip:8080` with your browser or
+Then you can hit privoxy web proxy at `http://host-ip:8118` with your browser or
 tor via the socks protocol directly at `http://hostname:9050`.
 
 
