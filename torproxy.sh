@@ -119,7 +119,8 @@ for env in $(printenv | grep '^TOR_'); do
     fi
 done
 
-chown -Rh debian-tor. /var/lib/tor /var/log/tor 2>&1 | grep -iv 'Read-only' || :
+chown -Rh debian-tor. /etc/tor /var/lib/tor /var/log/tor 2>&1 |
+            grep -iv 'Read-only' || :
 
 if [[ $# -ge 1 && -x $(which $1 2>&-) ]]; then
     exec "$@"
