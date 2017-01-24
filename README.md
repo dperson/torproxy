@@ -50,6 +50,8 @@ tor via the socks protocol directly at `http://hostname:9050`.
                     <host:port> - destination for service request
         -t ""       Configure timezone
                     possible arg: "[timezone]" - zoneinfo timezone for container
+        -l ""       Exit location
+                    possible arg: "DE" - exit node in DE will be used
 
     The 'command' (if provided and valid) will be run instead of torproxy
 

@@ -36,6 +36,15 @@ exitnode() { local file=/etc/tor/torrc
     sed -i '/^ExitPolicy/d' $file
 }
 
+### set_exit_node_country: overwrite exit node to a specific country
+# Arguments:
+#   country) country where we want to exit
+# Return: Updated configuration file
+set_exit_node_country() { local country="$1" file=/etc/tor/torrc
+    echo "StrictNodes 1" >>$file
+    echo "ExitNodes {$country}" >>$file
+}
+
 ### hidden_service: setup a hidden service
 # Arguments:
 #   port) port to connect to service
@@ -82,19 +91,22 @@ Options (fields in '[]' are optional, '<>' are required):
                 <host:port> - destination for service request
     -t \"\"       Configure timezone
                 possible arg: \"[timezone]\" - zoneinfo timezone for container
+    -l \"\"       Exit location
+                possible arg: \"DE\" - exit node in DE will be used
 
 The 'command' (if provided and valid) will be run instead of torproxy
 " >&2
     exit $RC
 }
 
-while getopts ":b:es:ht:" opt; do
+while getopts ":b:es:htl:" opt; do
     case "$opt" in
         h) usage ;;
         b) bandwidth "$OPTARG" ;;
         e) exitnode ;;
         s) eval hidden_service $(sed 's/^\|$/"/g; s/;/" "/g' <<< $OPTARG) ;;
         t) timezone "$OPTARG" ;;
+        l) set_exit_node_country "$OPTARG" ;;
         "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
         ":") echo "No argument value for option: -$OPTARG"; usage 2 ;;
     esac
@@ -103,6 +115,7 @@ shift $(( OPTIND - 1 ))
 
 [[ "${BW:-""}" ]] && bandwidth "$BW"
 [[ "${EXITNODE:-""}" ]] && exitnode
+[[ "${LOCATION:-""}" ]] && set_exit_node_country
 [[ "${TZ:-""}" ]] && timezone "$TZ"
 [[ "${SERVICE:-""}" ]] && eval hidden_service \
             $(sed 's/^\|$/"/g; s/;/" "/g' <<< $SERVICE)
