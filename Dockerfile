@@ -4,6 +4,7 @@ MAINTAINER David Personette <dperson@gmail.com>
 # Install tor and privoxy
 RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-get update -qq && \
+    apt-get install -y --no-install-recommends apt-utils && \
     apt-get install -qqy --no-install-recommends gnupg1 procps && \
     apt-key adv --keyserver pgp.mit.edu --recv-keys \
                 A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 && \
@@ -12,6 +13,7 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-get update -qq && \
     apt-get install -qqy --no-install-recommends tor privoxy \
                 $(apt-get -s dist-upgrade|awk '/^Inst.*ecurity/ {print $2}') &&\
+    apt-get install -y tor-geoipdb && \
     sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' /etc/privoxy/config &&\
     sed -i 's|\(127.0.0.1\|localhost\):8118|0.0.0.0:8118|' /etc/privoxy/config \
     && sed -i 's|^\(logdir\) .*|\1 /dev|' /etc/privoxy/config && \
