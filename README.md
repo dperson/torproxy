@@ -44,6 +44,9 @@ tor via the socks protocol directly at `http://hostname:9050`.
         -b ""       Configure tor relaying bandwidth in KB/s
                     possible arg: "[number]" - # of KB/s to allow
         -e          Allow this to be an exit node for tor traffic
+        -l "<country>" Configure tor to only use exit nodes in specified country
+                    required args: "<country>" (IE, "US" or "DE")
+                    <country> - country traffic should exit in
         -s "<port>;<host:port>" Configure tor hidden service
                     required args: "<port>;<host:port>"
                     <port> - port for .onion service to listen on
@@ -58,6 +61,7 @@ ENVIRONMENT VARIABLES (only available with `docker run`)
  * `TORUSER` - If set use named user instead of 'debian-tor' (for example root)
  * `BW` - As above, set a tor relay bandwidth limit in KB, IE `50`
  * `EXITNODE` - As above, allow tor traffic to access the internet from your IP
+ * `LOCATION` - As above, configure the country to use for exit node selection
  * `SERVICE - As above, configure hidden service, IE '80;hostname:80'
  * `TZ` - As above, configure the zoneinfo timezone, IE `EST5EDT`
  * `USERID` - Set the UID for the app user

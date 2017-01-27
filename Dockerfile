@@ -10,7 +10,7 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     /bin/echo -n "deb http://deb.torproject.org/torproject.org stretch main" \
                 >>/etc/apt/sources.list && \
     apt-get update -qq && \
-    apt-get install -qqy --no-install-recommends tor privoxy \
+    apt-get install -qqy --no-install-recommends privoxy tor tor-geoipdb \
                 $(apt-get -s dist-upgrade|awk '/^Inst.*ecurity/ {print $2}') &&\
     sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' /etc/privoxy/config &&\
     sed -i 's|\(127.0.0.1\|localhost\):8118|0.0.0.0:8118|' /etc/privoxy/config \

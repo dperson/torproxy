@@ -36,6 +36,16 @@ exitnode() { local file=/etc/tor/torrc
     sed -i '/^ExitPolicy/d' $file
 }
 
+### exitnode_country: Only allow traffic to exit in a specified country
+# Arguments:
+#   country) country where we want to exit
+# Return: Updated configuration file
+exitnode_country() { local country="$1" file=/etc/tor/torrc
+    sed -i '/^StrictNodes/d; /^ExitNodes/d' $file
+    echo "StrictNodes 1" >>$file
+    echo "ExitNodes {$country}" >>$file
+}
+
 ### hidden_service: setup a hidden service
 # Arguments:
 #   port) port to connect to service
@@ -76,6 +86,9 @@ Options (fields in '[]' are optional, '<>' are required):
     -b \"\"       Configure tor relaying bandwidth in KB/s
                 possible arg: \"[number]\" - # of KB/s to allow
     -e          Allow this to be an exit node for tor traffic
+    -l \"<country>\" Configure tor to only use exit nodes in specified country
+                required args: \"<country>\" (IE, "US" or "DE")
+                <country> - country traffic should exit in
     -s \"<port>;<host:port>\" Configure tor hidden service
                 required args: \"<port>;<host:port>\"
                 <port> - port for .onion service to listen on
@@ -88,11 +101,12 @@ The 'command' (if provided and valid) will be run instead of torproxy
     exit $RC
 }
 
-while getopts ":b:es:ht:" opt; do
+while getopts ":hb:el:s:t:" opt; do
     case "$opt" in
         h) usage ;;
         b) bandwidth "$OPTARG" ;;
         e) exitnode ;;
+        l) exitnode_country "$OPTARG" ;;
         s) eval hidden_service $(sed 's/^\|$/"/g; s/;/" "/g' <<< $OPTARG) ;;
         t) timezone "$OPTARG" ;;
         "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
@@ -103,9 +117,10 @@ shift $(( OPTIND - 1 ))
 
 [[ "${BW:-""}" ]] && bandwidth "$BW"
 [[ "${EXITNODE:-""}" ]] && exitnode
-[[ "${TZ:-""}" ]] && timezone "$TZ"
+[[ "${LOCATION:-""}" ]] && exitnode_country "$LOCATION"
 [[ "${SERVICE:-""}" ]] && eval hidden_service \
             $(sed 's/^\|$/"/g; s/;/" "/g' <<< $SERVICE)
+[[ "${TZ:-""}" ]] && timezone "$TZ"
 [[ "${USERID:-""}" =~ ^[0-9]+$ ]] && usermod -u $USERID -o debian-tor
 [[ "${GROUPID:-""}" =~ ^[0-9]+$ ]] && groupmod -g $GROUPID -o debian-tor
 for env in $(printenv | grep '^TOR_'); do
