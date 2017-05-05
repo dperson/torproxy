@@ -1,6 +1,8 @@
 FROM debian:stretch
 MAINTAINER David Personette <dperson@gmail.com>
 
+#   sed -i 's|^\([^#]*127.0.0.1:8118\)|#\1|' /etc/privoxy/config && \
+#   sed -i 's|^\([^#]*\[::1\]:8118\)|listen-address \1|' /etc/privoxy/config &&\
 # Install tor and privoxy
 RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-get update -qq && \
@@ -13,8 +15,6 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-get install -qqy --no-install-recommends privoxy tor tor-geoipdb \
                 $(apt-get -s dist-upgrade|awk '/^Inst.*ecurity/ {print $2}') &&\
     sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' /etc/privoxy/config &&\
-    sed -i 's|^[^#]*\(127.0.0.1:8118\)|#\1|' /etc/privoxy/config && \
-    sed -i 's|^[^#]*\[::1\]:8118|[::]:8118|' /etc/privoxy/config && \
     sed -i 's|^\(logdir\) .*|\1 /dev|' /etc/privoxy/config && \
     sed -i 's|^\(logfile\) .*|\1 stdout|' /etc/privoxy/config && \
     sed -i '/forward *localhost\//a forward-socks5t / 127.0.0.1:9050 .' \
