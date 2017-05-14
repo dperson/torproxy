@@ -13,6 +13,7 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-get install -qqy --no-install-recommends privoxy tor tor-geoipdb \
                 $(apt-get -s dist-upgrade|awk '/^Inst.*ecurity/ {print $2}') &&\
     sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' /etc/privoxy/config &&\
+    sed -i '/^listen/ {s|127\.0\.0\.1||; s|::1|::|}' /etc/privoxy/config && \
     sed -i 's|^\(logfile\)|#\1|' /etc/privoxy/config && \
     sed -i 's|^#\(log-messages\)|\1|' /etc/privoxy/config && \
     sed -i 's|^#\(log-highlight-messages\)|\1|' /etc/privoxy/config && \
