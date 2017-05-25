@@ -126,6 +126,7 @@ shift $(( OPTIND - 1 ))
 for env in $(printenv | grep '^TOR_'); do
     name=$(cut -c4- <<< ${env%%=*})
     val="\"${env##*=}\""
+    [[ "$name" =~ _ ]] && continue
     [[ "$val" =~ ^\"([0-9]+|false|true)\"$ ]] && val=$(sed 's|"||g' <<<$val)
     if grep -q "^$name" /etc/tor/torrc; then
         sed -i "/^$name/s| .*| $val|" /etc/tor/torrc
