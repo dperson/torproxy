@@ -58,6 +58,15 @@ hidden_service() { local port="$1" host="$2" file=/etc/tor/torrc
     echo "HiddenServicePort $port $host" >>$file
 }
 
+### password: setup a hashed password
+# Arguments:
+#   passwd) passwd to set
+# Return: Updated configuration file
+password() { local passwd="$1" file=/etc/tor/torrc
+    sed -i '/^HashedControlPassword/d' $file
+    echo "HashedControlPassword $(tor --hash-password "$passwd")" >>$file
+}
+
 ### timezone: Set the timezone for the container
 # Arguments:
 #   timezone) for example EST5EDT
@@ -89,6 +98,7 @@ Options (fields in '[]' are optional, '<>' are required):
     -l \"<country>\" Configure tor to only use exit nodes in specified country
                 required args: \"<country>\" (IE, "US" or "DE")
                 <country> - country traffic should exit in
+    -p \"<password>\" Configure tor HashedControlPassword for control port
     -s \"<port>;<host:port>\" Configure tor hidden service
                 required args: \"<port>;<host:port>\"
                 <port> - port for .onion service to listen on
@@ -101,12 +111,13 @@ The 'command' (if provided and valid) will be run instead of torproxy
     exit $RC
 }
 
-while getopts ":hb:el:s:t:" opt; do
+while getopts ":hb:el:p:s:t:" opt; do
     case "$opt" in
         h) usage ;;
         b) bandwidth "$OPTARG" ;;
         e) exitnode ;;
         l) exitnode_country "$OPTARG" ;;
+        p) password "$OPTARG" ;;
         s) eval hidden_service $(sed 's/^\|$/"/g; s/;/" "/g' <<< $OPTARG) ;;
         t) timezone "$OPTARG" ;;
         "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
@@ -118,6 +129,7 @@ shift $(( OPTIND - 1 ))
 [[ "${BW:-""}" ]] && bandwidth "$BW"
 [[ "${EXITNODE:-""}" ]] && exitnode
 [[ "${LOCATION:-""}" ]] && exitnode_country "$LOCATION"
+[[ "${PASSWORD:-""}" ]] && password "$PASSWORD"
 [[ "${SERVICE:-""}" ]] && eval hidden_service \
             $(sed 's/^\|$/"/g; s/;/" "/g' <<< $SERVICE)
 [[ "${TZ:-""}" ]] && timezone "$TZ"
