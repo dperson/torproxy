@@ -7,7 +7,7 @@ RUN export DEBIAN_FRONTEND='noninteractive' && \
     apt-get install -qqy --no-install-recommends gnupg1 procps && \
     apt-key adv --keyserver pgp.mit.edu --recv-keys \
                 A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 && \
-    /bin/echo -n "deb http://deb.torproject.org/torproject.org stretch main" \
+    echo -n "deb http://deb.torproject.org/torproject.org stretch main" \
                 >>/etc/apt/sources.list && \
     apt-get update -qq && \
     apt-get install -qqy --no-install-recommends privoxy tor tor-geoipdb \
