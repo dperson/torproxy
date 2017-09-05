@@ -23,7 +23,8 @@ and removing ads and other obnoxious Internet junk.
 **NOTE 1**: this image is setup by default to be a relay only (not an exit node)
 
 **NOTE 2**: this image now supports relaying all traffic through the container,
-see: [tor-route-all-traffic.sh](https://github.com/dperson/torproxy/blob/master/tor-route-all-traffic.sh)
+see: [tor-route-all-traffic.sh](https://github.com/dperson/torproxy/blob/master/tor-route-all-traffic.sh).
+For it to work, you must set `--net=host` when launching the container.
 
 ## Exposing the port
 
