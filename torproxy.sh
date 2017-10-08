@@ -65,7 +65,7 @@ hidden_service() { local port="$1" host="$2" file=/etc/tor/torrc
 password() { local passwd="$1" file=/etc/tor/torrc
     sed -i '/^HashedControlPassword/d' $file
     echo "HashedControlPassword $(su - debian-tor -s/bin/bash -c \
-                "tor --hash-password '$password'")" >>$file
+                "tor --hash-password '$passwd'")" >>$file
 }
 
 ### timezone: Set the timezone for the container
