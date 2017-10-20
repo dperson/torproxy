@@ -53,8 +53,6 @@ tor via the socks protocol directly at `http://hostname:9050`.
                     required args: "<port>;<host:port>"
                     <port> - port for .onion service to listen on
                     <host:port> - destination for service request
-        -t ""       Configure timezone
-                    possible arg: "[timezone]" - zoneinfo timezone for container
 
     The 'command' (if provided and valid) will be run instead of torproxy
 
@@ -66,7 +64,7 @@ ENVIRONMENT VARIABLES (only available with `docker run`)
  * `LOCATION` - As above, configure the country to use for exit node selection
  * `PASSWORD` - As above, configure HashedControlPassword for control port
  * `SERVICE - As above, configure hidden service, IE '80;hostname:80'
- * `TZ` - As above, configure the zoneinfo timezone, IE `EST5EDT`
+ * `TZ` - Configure the zoneinfo timezone, IE `EST5EDT`
  * `USERID` - Set the UID for the app user
  * `GROUPID` - Set the GID for the app user
 
@@ -82,18 +80,8 @@ Any of the commands can be run at creation with `docker run` or later with
 
 ### Setting the Timezone
 
-    sudo docker run -it -p 8118:8118 -p 9050:9050 -d dperson/torproxy -t EST5EDT
-
-OR using `environment variables`
-
     sudo docker run -it -p 8118:8118 -p 9050:9050 -e TZ=EST5EDT \
                 -d dperson/torproxy
-
-Will get you the same settings as
-
-    sudo docker run -it --name tor -p 8118:8118 -p 9050:9050 -d dperson/torproxy
-    sudo docker exec -it tor torproxy.sh -t EST5EDT ls -AlF /etc/localtime
-    sudo docker restart tor
 
 ### Start torproxy setting the allowed bandwidth:
 

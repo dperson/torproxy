@@ -68,23 +68,6 @@ password() { local passwd="$1" file=/etc/tor/torrc
                 "tor --hash-password '$passwd'")" >>$file
 }
 
-### timezone: Set the timezone for the container
-# Arguments:
-#   timezone) for example EST5EDT
-# Return: the correct zoneinfo file will be symlinked into place
-timezone() { local timezone="${1:-EST5EDT}"
-    [[ -e /usr/share/zoneinfo/$timezone ]] || {
-        echo "ERROR: invalid timezone specified: $timezone" >&2
-        return
-    }
-
-    if [[ -w /etc/timezone && $(cat /etc/timezone) != $timezone ]]; then
-        echo "$timezone" >/etc/timezone
-        ln -sf /usr/share/zoneinfo/$timezone /etc/localtime
-        dpkg-reconfigure -f noninteractive tzdata >/dev/null 2>&1
-    fi
-}
-
 ### usage: Help
 # Arguments:
 #   none)
@@ -104,23 +87,20 @@ Options (fields in '[]' are optional, '<>' are required):
                 required args: \"<port>;<host:port>\"
                 <port> - port for .onion service to listen on
                 <host:port> - destination for service request
-    -t \"\"       Configure timezone
-                possible arg: \"[timezone]\" - zoneinfo timezone for container
 
 The 'command' (if provided and valid) will be run instead of torproxy
 " >&2
     exit $RC
 }
 
-while getopts ":hb:el:p:s:t:" opt; do
+while getopts ":hb:el:p:s:" opt; do
     case "$opt" in
         h) usage ;;
         b) bandwidth "$OPTARG" ;;
         e) exitnode ;;
         l) exitnode_country "$OPTARG" ;;
         p) password "$OPTARG" ;;
-        s) eval hidden_service $(sed 's/^\|$/"/g; s/;/" "/g' <<< $OPTARG) ;;
-        t) timezone "$OPTARG" ;;
+        s) eval hidden_service $(sed 's/^/"/; s/$/"/; s/;/" "/g' <<< $OPTARG) ;;
         "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
         ":") echo "No argument value for option: -$OPTARG"; usage 2 ;;
     esac
@@ -132,8 +112,7 @@ shift $(( OPTIND - 1 ))
 [[ "${LOCATION:-""}" ]] && exitnode_country "$LOCATION"
 [[ "${PASSWORD:-""}" ]] && password "$PASSWORD"
 [[ "${SERVICE:-""}" ]] && eval hidden_service \
-            $(sed 's/^\|$/"/g; s/;/" "/g' <<< $SERVICE)
-[[ "${TZ:-""}" ]] && timezone "$TZ"
+            $(sed 's/^/"/; s/$/"/; s/;/" "/g' <<< $SERVICE)
 [[ "${USERID:-""}" =~ ^[0-9]+$ ]] && usermod -u $USERID -o tor
 [[ "${GROUPID:-""}" =~ ^[0-9]+$ ]] && groupmod -g $GROUPID -o tor
 for env in $(printenv | grep '^TOR_'); do

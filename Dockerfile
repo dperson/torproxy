@@ -2,7 +2,7 @@ FROM alpine
 MAINTAINER David Personette <dperson@gmail.com>
 
 # Install tor and privoxy
-RUN apk --no-cache add bash curl privoxy tor && \
+RUN apk --no-cache --no-progress add bash curl privoxy shadow tor && \
     file='/etc/privoxy/config' && \
     sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' $file && \
     sed -i '/^listen/s|127\.0\.0\.1||' $file && \
@@ -48,12 +48,13 @@ RUN apk --no-cache add bash curl privoxy tor && \
     echo 'TransPort 9040' >>/etc/tor/torrc && \
     mkdir -p /etc/tor/run && \
     chown -Rh tor. /var/lib/tor /etc/tor/run && \
-    chmod 0750 /etc/tor/run
+    chmod 0750 /etc/tor/run && \
+    rm -rf /tmp/*
 
 COPY torproxy.sh /usr/bin/
 
 HEALTHCHECK --interval=60s --timeout=15s --start-period=90s \
-            CMD curl --socks5-hostname tundro:9050 -L 'https://api.ipify.org'
+            CMD curl --socks5-hostname localhost:9050 -L 'https://api.ipify.org'
 
 EXPOSE 8118 9050 9051
 
