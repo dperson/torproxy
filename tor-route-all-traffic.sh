@@ -34,7 +34,7 @@ if [[ "$_tor_container" == "" ]]; then
 fi
 
 ### get the UID that tor runs as
-_tor_uid=$(docker exec $_tor_container id -u debian-tor)
+_tor_uid=$(docker exec $_tor_container id -u tor)
 
 ### Tor's TransPort
 _trans_port="9040"

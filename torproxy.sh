@@ -64,7 +64,7 @@ hidden_service() { local port="$1" host="$2" file=/etc/tor/torrc
 # Return: Updated configuration file
 password() { local passwd="$1" file=/etc/tor/torrc
     sed -i '/^HashedControlPassword/d' $file
-    echo "HashedControlPassword $(su - debian-tor -s/bin/bash -c \
+    echo "HashedControlPassword $(su - tor -s/bin/bash -c \
                 "tor --hash-password '$passwd'")" >>$file
 }
 
@@ -134,8 +134,8 @@ shift $(( OPTIND - 1 ))
 [[ "${SERVICE:-""}" ]] && eval hidden_service \
             $(sed 's/^\|$/"/g; s/;/" "/g' <<< $SERVICE)
 [[ "${TZ:-""}" ]] && timezone "$TZ"
-[[ "${USERID:-""}" =~ ^[0-9]+$ ]] && usermod -u $USERID -o debian-tor
-[[ "${GROUPID:-""}" =~ ^[0-9]+$ ]] && groupmod -g $GROUPID -o debian-tor
+[[ "${USERID:-""}" =~ ^[0-9]+$ ]] && usermod -u $USERID -o tor
+[[ "${GROUPID:-""}" =~ ^[0-9]+$ ]] && groupmod -g $GROUPID -o tor
 for env in $(printenv | grep '^TOR_'); do
     name=$(cut -c4- <<< ${env%%=*})
     val="\"${env##*=}\""
@@ -148,7 +148,7 @@ for env in $(printenv | grep '^TOR_'); do
     fi
 done
 
-chown -Rh debian-tor. /etc/tor /var/lib/tor /var/log/tor 2>&1 |
+chown -Rh tor. /etc/tor /var/lib/tor /var/log/tor 2>&1 |
             grep -iv 'Read-only' || :
 
 if [[ $# -ge 1 && -x $(which $1 2>&-) ]]; then
