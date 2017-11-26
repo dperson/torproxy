@@ -64,6 +64,7 @@ hidden_service() { local port="$1" host="$2" file=/etc/tor/torrc
 # Return: Updated configuration file
 password() { local passwd="$1" file=/etc/tor/torrc
     sed -i '/^HashedControlPassword/d' $file
+    sed -i '/^ControlPort/s/ 9051/ 0.0.0.0:9051/' $file
     echo "HashedControlPassword $(su - tor -s/bin/bash -c \
                 "tor --hash-password '$passwd'")" >>$file
 }
