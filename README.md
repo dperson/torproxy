@@ -102,7 +102,7 @@ OR
 
 ## Test the proxy:
 
-    curl -x http://<ipv4_address>:8118 http://jsonip.com/
+    curl -Lx http://<ipv4_address>:8118 http://jsonip.com/
 
 ---
 
