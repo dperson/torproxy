@@ -26,7 +26,7 @@ set -euo pipefail                           # Treat unset variables as an error
 _non_tor="192.168.1.0/24 192.168.0.0/24"
 
 ### get the container tor runs in
-_tor_container=$(docker ps | awk '/torproxy/ {print $NF; quit}')
+_tor_container="$(docker ps | awk '/torproxy/ {print $NF; quit}')"
 if [[ "$_tor_container" == "" ]]; then
     echo 'ERROR: you must start a tor proxy container first, IE:'
     echo '    docker run -d --net host --restart always dperson/torproxy'
@@ -34,7 +34,7 @@ if [[ "$_tor_container" == "" ]]; then
 fi
 
 ### get the UID that tor runs as
-_tor_uid=$(docker exec $_tor_container id -u tor)
+_tor_uid="$(docker exec $_tor_container id -u tor)"
 
 ### Tor's TransPort
 _trans_port="9040"

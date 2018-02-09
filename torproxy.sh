@@ -73,7 +73,7 @@ password() { local passwd="$1" file=/etc/tor/torrc
 # Arguments:
 #   none)
 # Return: Help text
-usage() { local RC=${1:-0}
+usage() { local RC="${1:-0}"
     echo "Usage: ${0##*/} [-opt] [command]
 Options (fields in '[]' are optional, '<>' are required):
     -h          This help
@@ -117,10 +117,10 @@ shift $(( OPTIND - 1 ))
 [[ "${USERID:-""}" =~ ^[0-9]+$ ]] && usermod -u $USERID -o tor
 [[ "${GROUPID:-""}" =~ ^[0-9]+$ ]] && groupmod -g $GROUPID -o tor
 for env in $(printenv | grep '^TOR_'); do
-    name=$(cut -c4- <<< ${env%%=*})
+    name="$(cut -c4- <<< ${env%%=*})"
     val="\"${env##*=}\""
     [[ "$name" =~ _ ]] && continue
-    [[ "$val" =~ ^\"([0-9]+|false|true)\"$ ]] && val=$(sed 's|"||g' <<<$val)
+    [[ "$val" =~ ^\"([0-9]+|false|true)\"$ ]] && val="$(sed 's|"||g' <<< $val)"
     if grep -q "^$name" /etc/tor/torrc; then
         sed -i "/^$name/s| .*| $val|" /etc/tor/torrc
     else
