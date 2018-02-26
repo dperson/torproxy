@@ -48,6 +48,7 @@ tor via the socks protocol directly at `http://hostname:9050`.
         -l "<country>" Configure tor to only use exit nodes in specified country
                     required args: "<country>" (IE, "US" or "DE")
                     <country> - country traffic should exit in
+        -n          Generate new circuits now
         -p "<password>" Configure tor HashedControlPassword for control port
         -s "<port>;<host:port>" Configure tor hidden service
                     required args: "<port>;<host:port>"

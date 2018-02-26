@@ -58,6 +58,15 @@ hidden_service() { local port="$1" host="$2" file=/etc/tor/torrc
     echo "HiddenServicePort $port $host" >>$file
 }
 
+### newnym: setup new circuits
+# Arguments:
+#   N/A)
+# Return: New circuits for tor connections
+newnym() { local file=/etc/tor/run/control.authcookie
+    echo -e 'AUTHENTICATE "'"$(cat $file)"'"\nSIGNAL NEWNYM\nQUIT' |
+                nc 127.0.0.1 9051
+}
+
 ### password: setup a hashed password
 # Arguments:
 #   passwd) passwd to set
@@ -83,6 +92,7 @@ Options (fields in '[]' are optional, '<>' are required):
     -l \"<country>\" Configure tor to only use exit nodes in specified country
                 required args: \"<country>\" (IE, "US" or "DE")
                 <country> - country traffic should exit in
+    -n          Generate new circuits now
     -p \"<password>\" Configure tor HashedControlPassword for control port
     -s \"<port>;<host:port>\" Configure tor hidden service
                 required args: \"<port>;<host:port>\"
@@ -94,12 +104,13 @@ The 'command' (if provided and valid) will be run instead of torproxy
     exit $RC
 }
 
-while getopts ":hb:el:p:s:" opt; do
+while getopts ":hb:el:np:s:" opt; do
     case "$opt" in
         h) usage ;;
         b) bandwidth "$OPTARG" ;;
         e) exitnode ;;
         l) exitnode_country "$OPTARG" ;;
+        n) newnym ;;
         p) password "$OPTARG" ;;
         s) eval hidden_service $(sed 's/^/"/; s/$/"/; s/;/" "/g' <<< $OPTARG) ;;
         "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
