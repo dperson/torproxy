@@ -3,7 +3,7 @@ MAINTAINER David Personette <dperson@gmail.com>
 
 # Install tor and privoxy
 RUN apk --no-cache --no-progress upgrade && \
-    apk --no-cache --no-progress add bash curl privoxy shadow tor && \
+    apk --no-cache --no-progress add bash curl privoxy shadow tini tor && \
     file='/etc/privoxy/config' && \
     sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' $file && \
     sed -i '/^listen/s|127\.0\.0\.1||' $file && \
@@ -61,4 +61,4 @@ HEALTHCHECK --interval=60s --timeout=15s --start-period=90s \
 
 VOLUME ["/etc/tor", "/var/lib/tor"]
 
-ENTRYPOINT ["torproxy.sh"]
+ENTRYPOINT ["/sbin/tini", "--", "/usr/bin/torproxy.sh"]
