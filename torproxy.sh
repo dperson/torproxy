@@ -128,7 +128,7 @@ shift $(( OPTIND - 1 ))
 [[ "${USERID:-""}" =~ ^[0-9]+$ ]] && usermod -u $USERID -o tor
 [[ "${GROUPID:-""}" =~ ^[0-9]+$ ]] && groupmod -g $GROUPID -o tor
 for env in $(printenv | grep '^TOR_'); do
-    name="$(cut -c4- <<< ${env%%=*})"
+    name="$(cut -c5- <<< ${env%%=*})"
     val="\"${env##*=}\""
     [[ "$name" =~ _ ]] && continue
     [[ "$val" =~ ^\"([0-9]+|false|true)\"$ ]] && val="$(sed 's|"||g' <<< $val)"
