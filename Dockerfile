@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine:3.9
 MAINTAINER David Personette <dperson@gmail.com>
 
 # Install tor and privoxy
