@@ -56,8 +56,8 @@ COPY torproxy.sh /usr/bin/
 
 EXPOSE 8118 9050 9051
 
-HEALTHCHECK --interval=60s --timeout=15s --start-period=90s \
-            CMD curl --socks5-hostname localhost:9050 -L 'https://api.ipify.org'
+HEALTHCHECK --interval=10s --timeout=15s \
+            CMD curl -s -x localhost:8118 'https://check.torproject.org/' | grep -q -m 1 Congratulations
 
 VOLUME ["/etc/tor", "/var/lib/tor"]
 
