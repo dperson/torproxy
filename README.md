@@ -49,6 +49,12 @@ tor via the socks protocol directly at `http://hostname:9050`.
                     required args: "<country>" (IE, "US" or "DE")
                     <country> - country traffic should exit in
         -n          Generate new circuits now
+        -i "<nick>" Nickname of the relay node
+        -c "<info>" Set contact info for the relay node
+        -r "<dirport>" Enable and set port for directory mirroring
+                    (DirPort, usually 9030)
+        -o "<orport>"  Enable and set port for onion relay
+                    (ORPort, usually 9001)
         -p "<password>" Configure tor HashedControlPassword for control port
         -s "<port>;<host:port>" Configure tor hidden service
                     required args: "<port>;<host:port>"
@@ -68,6 +74,10 @@ ENVIRONMENT VARIABLES
  * `TZ` - Configure the zoneinfo timezone, IE `EST5EDT`
  * `USERID` - Set the UID for the app user
  * `GROUPID` - Set the GID for the app user
+ * `NICKNAME` - Set the nickname of the relay node
+ * `CONTACT_INFO` - Set contact info for the relay node
+ * `DIR_PORT` - Enable and set port for directory mirroring (DirPort, usually 9030)
+ * `OR_PORT` - Enable and set port for onion relay (ORPort, usually 9001)
 
 Other environment variables beginning with `TOR_` will edit the configuration
 file accordingly:

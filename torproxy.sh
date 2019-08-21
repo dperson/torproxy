@@ -28,6 +28,44 @@ bandwidth() { local kbs="${1:-10}" file=/etc/tor/torrc
     echo "RelayBandwidthBurst $(( kbs * 2 )) KB" >>$file
 }
 
+### nickname: the name of the relay node
+# Arguments:
+#   nick) the name of the relay node
+# Return: Updated configuration file
+nickname() { local nick="$1" file=/etc/tor/torrc
+  sed -i '/^Nickname/d' $file
+  echo "Nickname $nick" >>$file
+}
+
+### contact_info: set the contact email address to get
+# notified about down time by the tor weather service
+# if the relay node goes offline for more than 48 hours
+# Arguments:
+#   email) the email to contact the node operator through
+# Return: Updated configuration file
+contact_info() { local email="$1" file=/etc/tor/torrc
+  sed -i '/^ContactInfo/d' $file
+  echo "ContactInfo $email" >>$file
+}
+
+### dir_port: enable and set port for directory listing
+# Arguments:
+#   port) the port to use for directory listing
+# Return: Updated configuration file
+dir_port() { local port="$1" file=/etc/tor/torrc
+  sed -i '/^DirPort/d' $file
+  echo "DirPort $port" >>$file
+}
+
+### dir_port: enable and set port for onion relay
+# Arguments:
+#   port) the port to use for onion relay
+# Return: Updated configuration file
+or_port() { local port="$1" file=/etc/tor/torrc
+  sed -i '/^ORPort/d' $file
+  echo "ORPort $port" >>$file
+}
+
 ### exitnode: Allow exit traffic
 # Arguments:
 #   N/A)
@@ -94,6 +132,12 @@ Options (fields in '[]' are optional, '<>' are required):
                 required args: \"<country>\" (IE, "US" or "DE")
                 <country> - country traffic should exit in
     -n          Generate new circuits now
+    -i \"<nick>\" Nickname of the relay node
+    -c \"<info>\" Set contact info for the relay node
+    -r \"<dirport>\" Enable and set port for directory mirroring
+                (DirPort, port 9030)
+    -o \"<orport>\"  Enable and set port for onion relay
+                (ORPort, port 9001)
     -p \"<password>\" Configure tor HashedControlPassword for control port
     -s \"<port>;<host:port>\" Configure tor hidden service
                 required args: \"<port>;<host:port>\"
@@ -105,13 +149,17 @@ The 'command' (if provided and valid) will be run instead of torproxy
     exit $RC
 }
 
-while getopts ":hb:el:np:s:" opt; do
+while getopts ":hb:el:np:s:i:c:r:o:" opt; do
     case "$opt" in
         h) usage ;;
         b) bandwidth "$OPTARG" ;;
         e) exitnode ;;
         l) exitnode_country "$OPTARG" ;;
         n) newnym ;;
+        i) nickname "$OPTARG" ;;
+        c) contact_info "$OPTARG" ;;
+        r) dir_port "$OPTARG" ;;
+        o) or_port "$OPTARG" ;;
         p) password "$OPTARG" ;;
         s) eval hidden_service $(sed 's/^/"/; s/$/"/; s/;/" "/g' <<< $OPTARG) ;;
         "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
@@ -124,6 +172,10 @@ shift $(( OPTIND - 1 ))
 [[ "${EXITNODE:-""}" ]] && exitnode
 [[ "${LOCATION:-""}" ]] && exitnode_country "$LOCATION"
 [[ "${PASSWORD:-""}" ]] && password "$PASSWORD"
+[[ "${NICKNAME:-""}" ]] && nickname "$NICKNAME"
+[[ "${CONTACT_INFO:-""}" ]] && contact_info "$CONTACT_INFO"
+[[ "${DIR_PORT:-""}" ]] && dir_port "$DIR_PORT"
+[[ "${OR_PORT:-""}" ]] && or_port "$OR_PORT"
 [[ "${SERVICE:-""}" ]] && eval hidden_service \
             $(sed 's/^/"/; s/$/"/; s/;/" "/g' <<< $SERVICE)
 [[ "${USERID:-""}" =~ ^[0-9]+$ ]] && usermod -u $USERID -o tor
