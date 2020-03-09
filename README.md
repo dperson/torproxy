@@ -60,6 +60,8 @@ tor via the socks protocol directly at `http://hostname:9050`.
                     required args: "<port>;<host:port>"
                     <port> - port for .onion service to listen on
                     <host:port> - destination for service request
+        -t \"<ctrlport>\"  Enable and set control port
+                    (ControlPort, port 9051)
 
     The 'command' (if provided and valid) will be run instead of torproxy
 
@@ -78,6 +80,7 @@ ENVIRONMENT VARIABLES
  * `CONTACT_INFO` - Set contact info for the relay node
  * `DIR_PORT` - Enable and set port for directory mirroring (DirPort, usually 9030)
  * `OR_PORT` - Enable and set port for onion relay (ORPort, usually 9001)
+ * `CTRL_PORT` - Set control port (ControlPort, usually 9051)
 
 Other environment variables beginning with `TOR_` will edit the configuration
 file accordingly:

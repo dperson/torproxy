@@ -66,6 +66,15 @@ or_port() { local port="$1" file=/etc/tor/torrc
   echo "ORPort $port" >>$file
 }
 
+### ctrl_port: enable and set control port
+# Arguments:
+#   port) the port to use as the control port
+# Return: Updated configuration file
+ctrl_port() { local port="$1" file=/etc/tor/torrc
+  sed -i '/^ControlPort/d' $file
+  echo "ControlPort $port" >>$file
+}
+
 ### exitnode: Allow exit traffic
 # Arguments:
 #   N/A)
@@ -143,13 +152,15 @@ Options (fields in '[]' are optional, '<>' are required):
                 required args: \"<port>;<host:port>\"
                 <port> - port for .onion service to listen on
                 <host:port> - destination for service request
+    -t \"<ctrlport>\"  Enable and set control port
+                (ControlPort, port 9051)
 
 The 'command' (if provided and valid) will be run instead of torproxy
 " >&2
     exit $RC
 }
 
-while getopts ":hb:el:np:s:i:c:r:o:" opt; do
+while getopts ":hb:el:np:s:i:c:r:o:t:" opt; do
     case "$opt" in
         h) usage ;;
         b) bandwidth "$OPTARG" ;;
@@ -162,6 +173,7 @@ while getopts ":hb:el:np:s:i:c:r:o:" opt; do
         o) or_port "$OPTARG" ;;
         p) password "$OPTARG" ;;
         s) eval hidden_service $(sed 's/^/"/; s/$/"/; s/;/" "/g' <<< $OPTARG) ;;
+        t) ctrl_port "$OPTARG" ;;
         "?") echo "Unknown option: -$OPTARG"; usage 1 ;;
         ":") echo "No argument value for option: -$OPTARG"; usage 2 ;;
     esac
@@ -176,6 +188,7 @@ shift $(( OPTIND - 1 ))
 [[ "${CONTACT_INFO:-""}" ]] && contact_info "$CONTACT_INFO"
 [[ "${DIR_PORT:-""}" ]] && dir_port "$DIR_PORT"
 [[ "${OR_PORT:-""}" ]] && or_port "$OR_PORT"
+[[ "${CTRL_PORT:-""}" ]] && ctrl_port "$CTRL_PORT"
 [[ "${SERVICE:-""}" ]] && eval hidden_service \
             $(sed 's/^/"/; s/$/"/; s/;/" "/g' <<< $SERVICE)
 [[ "${USERID:-""}" =~ ^[0-9]+$ ]] && usermod -u $USERID -o tor
