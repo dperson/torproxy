@@ -72,7 +72,7 @@ ENVIRONMENT VARIABLES
 Other environment variables beginning with `TOR_` will edit the configuration
 file accordingly:
 
- * `TOR_NewCircuitPeriod=400` will translate to `NewCircuitPeriod 10`
+ * `TOR_NewCircuitPeriod=400` will translate to `NewCircuitPeriod 400`
 
 ## Examples
 
