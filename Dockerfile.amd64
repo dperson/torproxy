@@ -1,5 +1,5 @@
 FROM alpine
-MAINTAINER David Personette <dperson@gmail.com>
+MAINTAINER Johannes Adams <johannes.adams@gmail.com>
 
 # Install tor and privoxy
 RUN apk --no-cache --no-progress upgrade && \
