@@ -32,21 +32,22 @@ RUN apk --no-cache --no-progress upgrade && \
     sed -i '/^forward 10\.\*\.\*\.\*\//a forward 192.168.*.*/ .' $file && \
     sed -i '/^forward 192\.168\.\*\.\*\//a forward 127.*.*.*/ .' $file && \
     sed -i '/^forward 127\.\*\.\*\.\*\//a forward localhost/ .' $file && \
+    echo 'AutomapHostsOnResolve 1' >>/etc/tor/torrc && \
+    echo 'ControlPort 9051' >>/etc/tor/torrc && \
     echo 'ControlSocket /etc/tor/run/control' >>/etc/tor/torrc && \
     echo 'ControlSocketsGroupWritable 1' >>/etc/tor/torrc && \
-    echo 'ControlPort 9051' >>/etc/tor/torrc && \
     echo 'CookieAuthentication 1' >>/etc/tor/torrc && \
-    echo 'CookieAuthFileGroupReadable 1' >>/etc/tor/torrc && \
     echo 'CookieAuthFile /etc/tor/run/control.authcookie' >>/etc/tor/torrc && \
-    echo 'DataDirectory /var/lib/tor' >>/etc/tor/torrc && \
-    echo 'RunAsDaemon 0' >>/etc/tor/torrc && \
-    echo 'User tor' >>/etc/tor/torrc && \
-    echo 'AutomapHostsOnResolve 1' >>/etc/tor/torrc && \
-    echo 'ExitPolicy reject *:*' >>/etc/tor/torrc && \
-    echo 'VirtualAddrNetworkIPv4 10.192.0.0/10' >>/etc/tor/torrc && \
+    echo 'CookieAuthFileGroupReadable 1' >>/etc/tor/torrc && \
     echo 'DNSPort 5353' >>/etc/tor/torrc && \
+    echo 'DataDirectory /var/lib/tor' >>/etc/tor/torrc && \
+    echo 'ExitPolicy reject *:*' >>/etc/tor/torrc && \
+    echo 'Log notice stderr' >>/etc/tor/torrc && \
+    echo 'RunAsDaemon 0' >>/etc/tor/torrc && \
     echo 'SocksPort 0.0.0.0:9050 IsolateDestAddr' >>/etc/tor/torrc && \
     echo 'TransPort 0.0.0.0:9040' >>/etc/tor/torrc && \
+    echo 'User tor' >>/etc/tor/torrc && \
+    echo 'VirtualAddrNetworkIPv4 10.192.0.0/10' >>/etc/tor/torrc && \
     mkdir -p /etc/tor/run && \
     chown -Rh tor. /var/lib/tor /etc/tor/run && \
     chmod 0750 /etc/tor/run && \
