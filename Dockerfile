@@ -41,7 +41,7 @@ RUN apk --no-cache --no-progress upgrade && \
     echo 'CookieAuthFileGroupReadable 1' >>/etc/tor/torrc && \
     echo 'DNSPort 5353' >>/etc/tor/torrc && \
     echo 'DataDirectory /var/lib/tor' >>/etc/tor/torrc && \
-    echo 'ExitPolicy reject *:*' >>/etc/tor/torrc && \
+    echo 'ExitPolicy reject6 *:*, reject *:*' >>/etc/tor/torrc && \
     echo 'Log notice stderr' >>/etc/tor/torrc && \
     echo 'RunAsDaemon 0' >>/etc/tor/torrc && \
     echo 'SocksPort 0.0.0.0:9050 IsolateDestAddr' >>/etc/tor/torrc && \
