@@ -64,7 +64,7 @@ ENVIRONMENT VARIABLES
  * `EXITNODE` - As above, allow tor traffic to access the internet from your IP
  * `LOCATION` - As above, configure the country to use for exit node selection
  * `PASSWORD` - As above, configure HashedControlPassword for control port
- * `SERVICE - As above, configure hidden service, IE '80;hostname:80'
+ * `SERVICE` - As above, configure hidden service, IE '80;hostname:80'
  * `TZ` - Configure the zoneinfo timezone, IE `EST5EDT`
  * `USERID` - Set the UID for the app user
  * `GROUPID` - Set the GID for the app user
