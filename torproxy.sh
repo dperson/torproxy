@@ -63,9 +63,8 @@ hidden_service() { local port="$1" host="$2" file=/etc/tor/torrc
 #   N/A)
 # Return: New circuits for tor connections
 newnym() { local file=/etc/tor/run/control.authcookie
-    echo -e 'AUTHENTICATE "'"$(cat $file)"'"\nSIGNAL NEWNYM\nQUIT' |
+    echo -e 'AUTHENTICATE '"$(hexdump -e '32/1 "%02x""\n"' $file)"'\nSIGNAL NEWNYM\nQUIT' |
                 nc 127.0.0.1 9051
-    if ps -ef | egrep -v 'grep|torproxy.sh' | grep -q tor; then exit 0; fi
 }
 
 ### password: setup a hashed password
