@@ -3,8 +3,9 @@ MAINTAINER David Personette <dperson@gmail.com>
 
 # Install tor and privoxy
 RUN apk --no-cache --no-progress upgrade && \
-    apk --no-cache --no-progress add bash curl privoxy shadow tini tor tzdata&&\
+    apk --no-cache --no-progress add bash curl privoxy shadow tini tor tzdata && \
     file='/etc/privoxy/config' && \
+    touch $file && \
     sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' $file && \
     sed -i '/^listen/s|127\.0\.0\.1||' $file && \
     sed -i '/^listen.*::1/s|^|#|' $file && \
