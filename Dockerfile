@@ -3,15 +3,15 @@ MAINTAINER David Personette <dperson@gmail.com>
 
 # Install tor and privoxy
 RUN apk --no-cache --no-progress upgrade && \
-    apk --no-cache --no-progress add bash curl privoxy shadow tini tor tzdata&&\
-    file='/etc/privoxy/config' && \
+    apk --no-cache --no-progress add bash curl privoxy shadow tini tor tzdata && \
+    file='/etc/privoxy/config.new' && \
     sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' $file && \
     sed -i '/^listen/s|127\.0\.0\.1||' $file && \
     sed -i '/^listen.*::1/s|^|#|' $file && \
     sed -i 's|^\(logfile\)|#\1|' $file && \
     sed -i 's|^#\(log-messages\)|\1|' $file && \
     sed -i 's|^#\(log-highlight-messages\)|\1|' $file && \
-    sed -i '/forward *localhost\//a forward-socks5t / 127.0.0.1:9050 .' $file&&\
+    sed -i '/forward *localhost\//a forward-socks5t / 127.0.0.1:9050 .' $file &&\
     sed -i '/^forward-socks5t \//a forward 172.16.*.*/ .' $file && \
     sed -i '/^forward 172\.16\.\*\.\*\//a forward 172.17.*.*/ .' $file && \
     sed -i '/^forward 172\.17\.\*\.\*\//a forward 172.18.*.*/ .' $file && \
@@ -53,6 +53,13 @@ RUN apk --no-cache --no-progress upgrade && \
     chmod 0750 /etc/tor/run && \
     rm -rf /tmp/*
 
+# Remove .new from the privoxy config files
+# Clean up from Privoxy update
+RUN for f in /etc/privoxy/*; do mv "$f" "${f%*.new*}" ; done
+
+# Copy the new /tmp entrypoint script
+COPY tmp-entrypoint.sh /usr/bin/
+
 COPY torproxy.sh /usr/bin/
 
 EXPOSE 8118 9050 9051
@@ -63,4 +70,4 @@ HEALTHCHECK --interval=60s --timeout=15s --start-period=20s \
 
 VOLUME ["/etc/tor", "/var/lib/tor"]
 
-ENTRYPOINT ["/sbin/tini", "--", "/usr/bin/torproxy.sh"]
+CMD /usr/bin/tmp-entrypoint.sh
