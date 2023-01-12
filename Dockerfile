@@ -4,7 +4,8 @@ MAINTAINER David Personette <dperson@gmail.com>
 # Install tor and privoxy
 RUN apk --no-cache --no-progress upgrade && \
     apk --no-cache --no-progress add bash curl privoxy shadow tini tor tzdata && \
-    file='/etc/privoxy/config.new' && \
+    for f in /etc/privoxy/*; do mv "$f" "${f%*.new*}" ; done && \
+    file='/etc/privoxy/config' && \
     sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' $file && \
     sed -i '/^listen/s|127\.0\.0\.1||' $file && \
     sed -i '/^listen.*::1/s|^|#|' $file && \
@@ -53,13 +54,6 @@ RUN apk --no-cache --no-progress upgrade && \
     chmod 0750 /etc/tor/run && \
     rm -rf /tmp/*
 
-# Remove .new from the privoxy config files
-# Clean up from Privoxy update
-RUN for f in /etc/privoxy/*; do mv "$f" "${f%*.new*}" ; done
-
-# Copy the new /tmp entrypoint script
-COPY tmp-entrypoint.sh /usr/bin/
-
 COPY torproxy.sh /usr/bin/
 
 EXPOSE 8118 9050 9051
@@ -70,4 +64,4 @@ HEALTHCHECK --interval=60s --timeout=15s --start-period=20s \
 
 VOLUME ["/etc/tor", "/var/lib/tor"]
 
-CMD /usr/bin/tmp-entrypoint.sh
+ENTRYPOINT ["/sbin/tini", "--", "/usr/bin/torproxy.sh"]
