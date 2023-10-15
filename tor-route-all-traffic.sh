@@ -40,6 +40,10 @@ _tor_uid="$(docker exec $_tor_container id -u tor)"
 _trans_port="9040"
 _dns_port="5353"
 
+### disable ipv6
+sysctl -qw net.ipv6.conf.default.disable_ipv6=1
+sysctl -qw net.ipv6.conf.all.disable_ipv6=1
+
 ### flush iptables
 iptables -F
 iptables -t nat -F
