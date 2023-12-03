@@ -1,9 +1,17 @@
 FROM alpine
-MAINTAINER David Personette <dperson@gmail.com>
+#MAINTAINER Ramil Minkhanov  <digerfight@gmail.com>
 
 # Install tor and privoxy
-RUN apk --no-cache --no-progress upgrade && \
-    apk --no-cache --no-progress add bash curl privoxy shadow tini tor tzdata&&\
+RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
+    apk --no-cache --no-progress upgrade && \
+    apk --no-cache --no-progress add bash curl privoxy shadow tini tor tzdata lyrebird &&\
+    cp /etc/privoxy/config.new /etc/privoxy/config &&\
+    cp /etc/privoxy/default.filter.new /etc/privoxy/default.filter &&\
+    cp /etc/privoxy/user.filter.new /etc/privoxy/user.filter &&\
+    cp /etc/privoxy/match-all.action.new /etc/privoxy/match-all.action &&\
+    cp /etc/privoxy/default.action.new /etc/privoxy/default.action &&\
+    cp /etc/privoxy/user.action.new /etc/privoxy/user.action &&\
+    chmod -R 777 /etc/privoxy/ &&\
     file='/etc/privoxy/config' && \
     sed -i 's|^\(accept-intercepted-requests\) .*|\1 1|' $file && \
     sed -i '/^listen/s|127\.0\.0\.1||' $file && \
@@ -48,6 +56,12 @@ RUN apk --no-cache --no-progress upgrade && \
     echo 'TransPort 0.0.0.0:9040' >>/etc/tor/torrc && \
     echo 'User tor' >>/etc/tor/torrc && \
     echo 'VirtualAddrNetworkIPv4 10.192.0.0/10' >>/etc/tor/torrc && \
+    echo 'UseBridges 1' >> /etc/tor/torrc && \
+    echo 'ClientTransportPlugin obfs4 exec /usr/bin/lyrebird managed' >> /etc/tor/torrc && \
+    # You can change bridge
+    echo 'Bridge obfs4 213.29.63.159:65534 362051D19E695FED4C2B14B159447E6DADF24339 cert=zeNxMThA3+j7ZJygu1Tro6vBR9R2ZOWP46lsP9Cxt/7D8PkuzLUYgeALVu6Y6YLJ5UlrGw iat-mode=0' >> /etc/tor/torrc && \
+    echo 'Bridge obfs4 84.38.64.242:80 9FF3A220663997FDA707D85B3EF2DAC499B35150 cert=wHA3ovYq7rG/5UdW/7pSL5IHVofT2GhddvmpjWtOz91+2OKEUwehcGZj0wKXx4V+f12OCA iat-mode=0' >> /etc/tor/torrc && \
+    echo 'Bridge obfs4 142.171.234.45:8080 481DE3C95ACD9AB10B5B64E955EAE8D3C2FB435C cert=gWKeKf/9/wcImqxw2YeSEIZ85jzMYk3yh1EHXxDj44d0JPWSnXdrpOpb37G/Qu3T4GjxcQ iat-mode=0' >> /etc/tor/torrc && \
     mkdir -p /etc/tor/run && \
     chown -Rh tor. /var/lib/tor /etc/tor/run && \
     chmod 0750 /etc/tor/run && \
